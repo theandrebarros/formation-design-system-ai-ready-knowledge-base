@@ -10,9 +10,28 @@ Official typography guidelines from the FanDuel Variable Theme and Typography Li
 
 ## Font Families
 
-Formation uses two primary font families:
+Formation supports **two typography standards** based on product licensing:
 
-### Proxima Nova (Primary)
+### Typography Standards
+
+**Proxima Nova Standard** (Licensed Products):
+- For products with existing Proxima Nova license
+- Legacy products (before January 2025)
+
+**Inter/Roboto Standard** (New Products):
+- For products launched after January 2025
+- No licensing fees required
+- Google Fonts (free and open source)
+
+### Choosing the Right Standard
+
+- **Use Proxima Nova**: If your product has an existing license
+- **Use Inter/Roboto**: For all new products (post-January 2025)
+- **Auto-detection**: Formation Studio can auto-detect which standard your project uses
+
+### Proxima Nova Standard (Licensed Products)
+
+#### Proxima Nova (Primary)
 **Weight Range**: 400 (Regular), 600 (Semibold), 700 (Bold)
 
 Primary font for all body text, headings, and UI elements.
@@ -25,7 +44,7 @@ Weights Available:
 - 700 (Bold) - Headings, strong emphasis
 ```
 
-### Proxima Nova Condensed (Secondary)
+#### Proxima Nova Condensed (Secondary)
 **Weight Range**: 600 (Semibold), 700 (Bold), 800 (Extrabold)
 
 Used for metadata, labels, and compact UI elements.
@@ -36,6 +55,39 @@ Weights Available:
 - 600 (Semibold) - Labels, metadata
 - 700 (Bold) - Emphasized labels
 - 800 (Extrabold) - Very strong emphasis
+```
+
+### Inter/Roboto Standard (New Products)
+
+#### Inter (Primary)
+**Weight Range**: 400 (Regular), 500 (Medium), 600 (Semibold), 700 (Bold)
+
+Primary font for all body text, headings, and UI elements.
+
+```
+Font Family: "Inter"
+Weights Available:
+- 400 (Regular) - Body text, paragraphs
+- 500 (Medium) - Slight emphasis
+- 600 (Semibold) - Emphasis, subheadings
+- 700 (Bold) - Headings, strong emphasis
+Source: Google Fonts (free, open source)
+Variable Font: Yes (supports all weights 100-900)
+```
+
+#### Roboto (Secondary/Condensed)
+**Weight Range**: 400 (Regular), 500 (Medium), 700 (Bold)
+
+Used for metadata, labels, and compact UI elements.
+
+```
+Font Family: "Roboto"
+Weights Available:
+- 400 (Regular) - Labels, metadata
+- 500 (Medium) - Emphasized labels
+- 700 (Bold) - Very strong emphasis
+Source: Google Fonts (free, open source)
+Condensed Variant: Roboto Condensed available
 ```
 
 ## Typography Scale
@@ -244,13 +296,15 @@ Create clear visual hierarchy through size, weight, and spacing:
 - Use Formation typography styles from library
 - Match font sizes to their intended use cases
 - Maintain proper line heights
-- Use Proxima Nova for primary text
-- Use Proxima Nova Condensed for metadata/labels
+- **For licensed products**: Use Proxima Nova for primary text
+- **For new products (post-Jan 2025)**: Use Inter for primary text, Roboto for condensed
 - Follow responsive sizing guidelines
+- Stick to one font standard per product
 
 ### Don't ❌
 - Create custom font sizes outside the scale
-- Mix multiple font families
+- Mix Proxima Nova with Inter/Roboto in the same product
+- Use fonts outside the two approved standards
 - Use weights not in the Formation system
 - Ignore line height guidelines
 - Use text smaller than 12px

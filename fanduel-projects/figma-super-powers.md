@@ -1,9 +1,10 @@
-# Figma Super Powers
+# Formation Studio
 
+**Formerly**: Figma Super Powers  
 **Type**: Comprehensive MCP Bridge Plugin  
 **Tech Stack**: TypeScript, Node.js, WebSocket, MCP Protocol  
 **Architecture**: Clean Architecture / Domain-Driven Design  
-**Project Path**: `~/Documents/GitHub/figma-super-powers/`
+**Project Path**: `~/Documents/GitHub/formation-studio/`
 
 ## Purpose
 

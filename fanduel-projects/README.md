@@ -5,7 +5,7 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 ## Project Index
 
 ### 🎯 Core Infrastructure
-- **[Figma Super Powers](figma-super-powers.md)** - Comprehensive MCP bridge with clean architecture, design token validation, auto-layout operations, and export capabilities
+- **[Formation Studio](figma-super-powers.md)** (formerly Figma Super Powers) - Comprehensive MCP bridge with clean architecture, design token validation, auto-layout operations, and export capabilities
 
 ### ✅ Validation & Compliance
 - **[Formation Check](formation-check.md)** - Design system compliance checker that validates colors, spacing, and radius against Formation tokens
@@ -22,8 +22,8 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 ## Common Patterns
 
 ### Architecture
-- **Clean Architecture** - figma-super-powers implements full DDD with domains, adapters, services
-- **Command Pattern** - Registry-based command execution (see figma-super-powers)
+- **Clean Architecture** - formation-studio implements full DDD with domains, adapters, services
+- **Command Pattern** - Registry-based command execution (see formation-studio)
 - **Simple Plugins** - formation-check and formation-spacing use ES5 with no build step
 
 ### Token Operations
@@ -43,7 +43,7 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 ## Reusable Utilities
 
 ### Color Utilities
-- RGB/Hex conversion (figma-super-powers)
+- RGB/Hex conversion (formation-studio)
 - Color similarity matching (formation-check)
 - Token suggestion logic (formation-check, formation-spacing)
 
@@ -59,7 +59,7 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 
 ### Validation Patterns
 - Confidence-based matching (formation-spacing)
-- Batch validation (figma-super-powers, formation-check)
+- Batch validation (formation-studio, formation-check)
 - Issue categorization (formation-spacing)
 
 ## Quick Reference
@@ -79,15 +79,15 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 ## When Building New Plugins
 
 1. **Simple plugins** - Use ES5 pattern from formation-check
-2. **Complex plugins** - Use TypeScript + clean architecture from figma-super-powers
+2. **Complex plugins** - Use TypeScript + clean architecture from formation-studio
 3. **Variable operations** - Reference variable-exporter, variable-creator, variable-mapper
 4. **Validation** - Follow formation-check or formation-spacing patterns
-5. **MCP integration** - Use figma-super-powers as reference
+5. **MCP integration** - Use formation-studio as reference
 
 ## Project Locations
 
 All projects are in `~/Documents/GitHub/`:
-- `figma-super-powers/`
+- `formation-studio/` (formerly figma-super-powers)
 - `formation-check/`
 - `formation-component-upgrader/`
 - `formation-spacing/`
