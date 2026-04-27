@@ -114,4 +114,4 @@ See the following pages for detailed information:
 
 **Last Updated**: January 2026  
 **Maintained by**: Formation Design System Team  
-**Repository**: fanduel-dev-knowledge
+**Repository**: Formation Design System AI-Ready Knowledge Base

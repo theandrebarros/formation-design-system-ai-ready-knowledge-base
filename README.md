@@ -1,36 +1,32 @@
-# FanDuel Development Knowledge Base
+# Formation Design System AI-Ready Knowledge Base
 
 A centralized, reusable knowledge base for all FanDuel development projects. This reduces token usage by 60-70% while providing consistent context across multiple projects.
 
 ## Quick Navigation
 
 ### Formation Design System
-- **[Core Tokens](formation-ds/core/)** - Colors, spacing, radius, typography from official Figma files
-- **[Business Unit Themes](formation-ds/business-units/)** - Casino, Sportsbook, Picks, Predicts, etc.
-- **[Storybook Reference](formation-ds/storybook-reference.md)** - React component documentation
-- **[Confluence Links](formation-ds/confluence-links.md)** - Additional Formation documentation
-- **[Validation Rules](formation-ds/validation-rules.md)** - DS compliance checking
+- **[Core Tokens](.agents/skills/formation-design-system/references/core/)** - Colors, spacing, radius, typography from official Figma files
+- **[Business Unit Themes](.agents/skills/formation-design-system/references/business-units/)** - Casino, Sportsbook, Picks, Predicts, etc.
+- **[Storybook Reference](.agents/skills/formation-design-system/references/storybook-reference.md)** - React component documentation
+- **[Validation Rules](.agents/skills/formation-design-system/references/validation-rules.md)** - DS compliance checking
 
 ### Company Patterns
 - **[Architecture](company-patterns/architecture/)** - Clean architecture, DDD, hexagonal patterns
-- **[API Standards](company-patterns/api-standards/)** - REST conventions, error handling
-- **[Code Standards](company-patterns/code-standards/)** - TypeScript, naming, documentation
 
 ### Approved Tools
 - **[MCP Servers](approved-tools/mcp-servers.md)** - Security-vetted MCP servers
-- **[Atlassian MCP](approved-tools/atlassian-mcp.md)** - Jira and Confluence integration
-- **[Cursor Configuration](approved-tools/cursor-config.md)** - IDE setup guide
+
+### Figma Make
+- **[Formation Figma Make template](https://www.figma.com/make/7zIyVB72qQuqW2gZSZFBiL/)** - Start from Internal example when creating Make, or open file and use **Use in new file**
+- **[Guidelines](figma-make/figma-make-guidelines.md)** - Formation rules for Figma Make (paste into Adjust guidelines on the official template, or use as reference for custom files; all 10 BU themes)
 
 ### Figma Development
 - **[Plugin Architecture](figma-specific/plugin-architecture.md)** - Common plugin patterns
 - **[Plugin Constraints](figma-specific/plugin-constraints.md)** - Figma limitations and workarounds
-- **[Figma API Reference](figma-specific/figma-api-reference.md)** - Common API operations
-- **[WebSocket Bridge](figma-specific/websocket-bridge.md)** - Bridge server pattern
 
 ### Templates
 - **[.cursorrules Template](templates/cursorrules-template.md)** - Project .cursorrules template
 - **[README Template](templates/project-readme-template.md)** - Project README structure
-- **[MCP Tool Template](templates/mcp-tool-template.md)** - MCP tool documentation format
 
 ## How to Use
 
@@ -59,9 +55,9 @@ Add to your project's `.cursorrules`:
 ## Shared FanDuel Knowledge
 
 **Formation DS:**
-- Colors: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/colors.md
-- Spacing: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/spacing.md
-- Typography: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/typography.md
+- Colors: ~/Documents/GitHub/fanduel-dev-knowledge/.agents/skills/formation-design-system/references/core/colors.md
+- Spacing: ~/Documents/GitHub/fanduel-dev-knowledge/.agents/skills/formation-design-system/references/core/spacing.md
+- Typography: ~/Documents/GitHub/fanduel-dev-knowledge/.agents/skills/formation-design-system/references/core/typography.md
 
 **Architecture:**
 - Clean Architecture: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/clean-architecture.md
@@ -70,6 +66,23 @@ Add to your project's `.cursorrules`:
 **Tools:**
 - MCP Servers: ~/Documents/GitHub/fanduel-dev-knowledge/approved-tools/mcp-servers.md
 ```
+
+## Using with AI Tools
+
+Different tools need different things. Skills (`.agents/skills/`) are executable workflows for local IDE agents only. Cloud tools need context injection — a document pasted into their system prompt or Knowledge section.
+
+| Tool | What to use | How |
+|------|-------------|-----|
+| **Cursor / Windsurf** | `.cursorrules` + all 6 skills | Copy `templates/cursorrules-template.md` → see "How to Use" above |
+| **Claude Code** | `AGENTS.md` auto-loads | Clone repo; AGENTS.md is picked up automatically |
+| **Figma Make** | Official template + [`figma-make-guidelines.md`](figma-make/figma-make-guidelines.md) | New Make file → **Start from an example** → Internal Formation Powered card, **or** open the [template](https://www.figma.com/make/7zIyVB72qQuqW2gZSZFBiL/) → **Use in new file**. Guidelines optional for custom templates. |
+| **Lovable / Bolt** | `coach/formation-reference.md` | Paste full file into Lovable's Knowledge section or system prompt |
+| **v0.dev / other cloud tools** | `coach/formation-reference.md` | Paste into the system prompt; trim if the tool has a short context limit |
+
+### Key rule for cloud tools
+Cloud tools (Figma Make, Lovable, v0.dev) cannot read local files. Do **not** reference `~/Documents/...` paths. Paste the relevant `coach/` file directly into the tool.
+
+---
 
 ## Authoritative Sources
 
@@ -87,7 +100,7 @@ All Formation Design System documentation is extracted from official Figma files
 - **Lottery**: [Figma File](https://www.figma.com/design/e1P86bukeNV2mIHRY5Eu57/Lotto-Shop-Theme-Extension)
 - **Picks**: [Figma File](https://www.figma.com/design/ZDkb6CEhx2mpguB3xxOZb6/Picks-Theme-Extension)
 - **Predicts**: [Figma File](https://www.figma.com/design/NNkWJaRTcHtQH0dOHrgTjC/Predicts-Theme-Extension)
-- **Racing**: [Figma File](https://www.figma.com/design/NNkWJaRTcHtQH0dOHrgTjC/Predicts-Theme-Extension)
+- **Racing**: [Figma File](https://www.figma.com/design/M8mhjVPWAaUWdSbhhHnf2x/%F0%9F%96%8D%EF%B8%8F-Racing-Theme-Extension)
 - **Sportsbook**: [Figma File](https://www.figma.com/design/DYIB18bksdl3DwHwBktUL7/%F0%9F%94%B5-Sportsbook-Theme-Extension)
 
 ### Technical Documentation
@@ -122,30 +135,44 @@ All Formation Design System documentation is extracted from official Figma files
 ```
 fanduel-dev-knowledge/
 ├── README.md (this file)
-├── formation-ds/
-│   ├── core/                     # Official Figma extractions
-│   ├── business-units/           # BU theme extensions
-│   ├── storybook-reference.md
-│   ├── confluence-links.md
-│   ├── validation-rules.md
-│   └── migration-guide.md
+├── AGENTS.md (AI agent rules + full Formation token reference — auto-loaded by Claude Code)
+├── figma-make/                   # Official Figma Make template + Formation rules for Make
+│   ├── README.md                 # Start from example / Use in new file; maintainer notes
+│   └── figma-make-guidelines.md  # Paste into Adjust guidelines (official file) or reference for custom Make (all 10 BU themes)
+├── coach/                        # Context files for cloud AI tools (Lovable, v0.dev)
+│   ├── formation-reference.md    # Full self-contained reference (paste into Lovable/Bolt/v0)
+│   ├── figma-make-context.md     # Optional lightweight snippet for Figma Make context window
+│   ├── guidelines.md             # Figma-native design rules
+│   └── team.md                   # Formation team directory + escalation routing
+├── .agents/skills/               # Executable skills for local IDE agents (Cursor, Claude Code)
+│   ├── formation-design-system/  # Full Formation DS reference (pipeline-generated)
+│   │   ├── SKILL.md
+│   │   └── references/
+│   │       ├── core/             # colors, spacing, typography, radius, components, icons, icon-catalog
+│   │       ├── business-units/   # BU theme extensions (10 themes)
+│   │       ├── storybook-reference.md
+│   │       └── validation-rules.md
+│   ├── refresh-formation-tokens/ # Regenerate docs after token package update
+│   ├── validate-formation-usage/ # Audit code/Figma for DS compliance
+│   ├── create-figma-plugin/      # Scaffold a new Figma plugin
+│   ├── publish-to-confluence/    # Push docs to Confluence via MCP
+│   └── integrate-knowledge-base/ # Wire up Formation refs in a new project
 ├── company-patterns/
-│   ├── architecture/
-│   ├── api-standards/
-│   └── code-standards/
+│   └── architecture/             # Clean architecture, command pattern
 ├── approved-tools/
-│   ├── mcp-servers.md
-│   ├── atlassian-mcp.md
-│   └── cursor-config.md
+│   └── mcp-servers.md
 ├── figma-specific/
 │   ├── plugin-architecture.md
 │   ├── plugin-constraints.md
-│   ├── figma-api-reference.md
-│   └── websocket-bridge.md
+│   └── design-system-audit.md   # Figma vs KB gap audit (2026-03-25)
+├── fanduel-projects/             # Project documentation
+│   ├── formation-token-pipeline.md
+│   ├── figma-super-powers.md     # formation-studio
+│   └── (other plugin docs)
+├── confluence-docs/              # Content staged for Confluence publishing
 └── templates/
     ├── cursorrules-template.md
-    ├── project-readme-template.md
-    └── mcp-tool-template.md
+    └── project-readme-template.md
 ```
 
 ## Contributing
@@ -165,7 +192,7 @@ fanduel-dev-knowledge/
 
 ## Projects Using This Knowledge Base
 
-- **Figma Super Powers** - Figma plugin with MCP integration
+- **Formation Studio** (formerly Figma Super Powers) - Figma plugin with MCP integration
 - **formation-variable-mapper** - Variable mapping plugin
 - **formation-check** - Design system compliance checker
 - **formation-component-upgrader** - Component version management
@@ -173,22 +200,26 @@ fanduel-dev-knowledge/
 - **formation-variable-creator** - Cross-file variable creation
 - **formation-variable-exporter** - Variable to JavaScript export
 
-## Agent Skill
+## Agent Skills
 
-A comprehensive Cursor agent skill provides global access to all knowledge in this repository:
+Skills are procedural, task-oriented prompts — invoke them when you need to *do* something, not just look something up. They live in `.agents/skills/`.
 
-**Location**: `~/.cursor/skills/fanduel-projects/SKILL.md`
+### Reference skill (for token lookups)
 
-**Capabilities**:
-- Formation DS tokens on demand
-- Architecture pattern guidance
-- Figma plugin development help
-- Project-specific utilities and patterns
-- Approved tools and MCP servers
+**`formation-design-system`** — Full Formation token reference (colors, spacing, typography, radius, all 13 themes, 50 components). Invoke with `/formation-design-system`.
+Location: `.agents/skills/formation-design-system/SKILL.md`
 
-**Usage**: Simply ask questions from any project - "What's brand/primary?", "How does formation-check validate?", "Show me the clean architecture pattern"
+### Task skills
 
-The skill works globally across all your projects thanks to absolute path references to this knowledge base.
+| Skill | Invoke when you want to… |
+|-------|--------------------------|
+| `validate-formation-usage` | Audit code or Figma for Formation DS compliance |
+| `refresh-formation-tokens` | Regenerate token docs after a package version bump |
+| `create-figma-plugin` | Scaffold a new FanDuel Figma plugin |
+| `publish-to-confluence` | Publish knowledge base docs to Confluence |
+| `integrate-knowledge-base` | Wire up Formation references in a new or existing project |
+
+All task skills are in `.agents/skills/{skill-name}/SKILL.md`.
 
 ## Support
 
@@ -199,5 +230,5 @@ For questions or issues:
 
 ---
 
-**Last Updated**: January 2026  
+**Last Updated**: March 2026
 **Maintained by**: Formation Design System Team

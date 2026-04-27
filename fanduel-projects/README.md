@@ -19,6 +19,12 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 - **[Formation Variable Exporter](formation-variable-exporter.md)** - Export variables as JavaScript files with reference preservation
 - **[Formation Variable Mapper](formation-variable-mapper.md)** - Natural language variable mapping with MCP integration
 
+### ⚙️ Formation DS Automation
+- **[Formation Token Pipeline](formation-token-pipeline.md)** - Automated extraction pipeline that reads `@fanduel/formation-tokens` CSS, resolves all aliases to final values, and regenerates accurate docs for both Lovable and the Formation Design System AI-Ready Knowledge Base. Run `npm run all` to refresh everything in ~4 seconds.
+
+### 🔌 Proposed Integrations (Draft)
+- **[Storybook MCP Request](draft-storybook-mcp-request.md)** *(DRAFT — Pending Security Review)* - Security review request for integrating Storybook MCP to give AI agents machine-readable Formation component metadata. See also: [Confluence format](storybook-mcp-confluence-format.md) | [Strict template](storybook-mcp-strict-template.md)
+
 ## Common Patterns
 
 ### Architecture
@@ -75,6 +81,9 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 | Map variables | formation-variable-mapper |
 | Create variables across files | formation-variable-creator |
 | Add natural language input | formation-variable-mapper |
+| Refresh Formation DS docs from source | formation-token-pipeline |
+| Generate Lovable theme files | formation-token-pipeline |
+| Get correct token values for all BU themes | formation-token-pipeline |
 
 ## When Building New Plugins
 
@@ -86,7 +95,7 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 
 ## Project Locations
 
-All projects are in `~/Documents/GitHub/`:
+Figma plugins are in `~/Documents/GitHub/`:
 - `formation-studio/` (formerly figma-super-powers)
 - `formation-check/`
 - `formation-component-upgrader/`
@@ -95,7 +104,10 @@ All projects are in `~/Documents/GitHub/`:
 - `formation-variable-exporter/`
 - `formation-variable-mapper/`
 
+DS Automation tools are in `~/Documents/Development/Proof of Concept/Lovable/`:
+- `formation-token-pipeline/`
+
 ---
 
-**Last Updated**: January 2026  
+**Last Updated**: February 2026  
 **Maintained by**: FanDuel Formation Team
