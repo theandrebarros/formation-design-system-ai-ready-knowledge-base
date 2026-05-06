@@ -169,7 +169,12 @@ function goTo(next, direction) {
   current = next;
 
   if (mobileQuery.matches) {
-    /* On mobile sections are stacked — scroll the target into view */
+    /* On mobile sections are stacked — scroll the target into view.
+       Lock the observer so mid-scroll intersection callbacks don't
+       revert `current` to the section that's still filling the screen. */
+    isScrolling = true;
+    clearTimeout(scrollLockTimer);
+    scrollLockTimer = setTimeout(() => { isScrolling = false; }, 900);
     if ($entering) $entering.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } else {
     /* Desktop: animate enter class then slide the container */
@@ -248,6 +253,10 @@ $btnNext.addEventListener('click', () => goTo(current + 1, 1));
 if ($fabPrev) $fabPrev.addEventListener('click', () => goTo(current - 1, -1));
 if ($fabNext) $fabNext.addEventListener('click', () => goTo(current + 1, 1));
 
+/* ─── Scroll-lock flag: prevents the observer overriding `current` mid-scroll */
+let isScrolling = false;
+let scrollLockTimer = null;
+
 /* ─── IntersectionObserver: keep `current` in sync with scroll on mobile ── */
 const sectionEls = Array.from(document.querySelectorAll('.section[data-index]'));
 
@@ -256,6 +265,7 @@ const sectionRatios = new Map(sectionEls.map(el => [el, 0]));
 
 const visibilityObserver = new IntersectionObserver(entries => {
   if (!mobileQuery.matches) return;
+  if (isScrolling) return;  /* goTo is in control — don't clobber current */
 
   /* Update ratios for any section whose visibility just changed */
   entries.forEach(entry => sectionRatios.set(entry.target, entry.intersectionRatio));
