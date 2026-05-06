@@ -7,7 +7,6 @@ A centralized, reusable knowledge base for all FanDuel development projects. Thi
 ### Formation Design System
 - **[Core Tokens](.agents/skills/formation-design-system/references/core/)** - Colors, spacing, radius, typography from official Figma files
 - **[Business Unit Themes](.agents/skills/formation-design-system/references/business-units/)** - Casino, Sportsbook, Picks, Predicts, etc.
-- **[Storybook Reference](.agents/skills/formation-design-system/references/storybook-reference.md)** - React component documentation
 - **[Validation Rules](.agents/skills/formation-design-system/references/validation-rules.md)** - DS compliance checking
 
 ### Company Patterns
@@ -34,7 +33,7 @@ A centralized, reusable knowledge base for all FanDuel development projects. Thi
 
 1. **Copy the template:**
    ```bash
-   cp ~/Documents/GitHub/fanduel-dev-knowledge/templates/cursorrules-template.md ~/Documents/GitHub/your-project/.cursorrules
+   cp ~/Documents/GitHub/fanduel-ds-knowledge/templates/cursorrules-template.md ~/Documents/GitHub/your-project/.cursorrules
    ```
 
 2. **Customize for your project:**
@@ -55,16 +54,16 @@ Add to your project's `.cursorrules`:
 ## Shared FanDuel Knowledge
 
 **Formation DS:**
-- Colors: ~/Documents/GitHub/fanduel-dev-knowledge/.agents/skills/formation-design-system/references/core/colors.md
-- Spacing: ~/Documents/GitHub/fanduel-dev-knowledge/.agents/skills/formation-design-system/references/core/spacing.md
-- Typography: ~/Documents/GitHub/fanduel-dev-knowledge/.agents/skills/formation-design-system/references/core/typography.md
+- Colors: ~/Documents/GitHub/fanduel-ds-knowledge/.agents/skills/formation-design-system/references/core/colors.md
+- Spacing: ~/Documents/GitHub/fanduel-ds-knowledge/.agents/skills/formation-design-system/references/core/spacing.md
+- Typography: ~/Documents/GitHub/fanduel-ds-knowledge/.agents/skills/formation-design-system/references/core/typography.md
 
 **Architecture:**
-- Clean Architecture: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/clean-architecture.md
-- Command Pattern: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/command-pattern.md
+- Clean Architecture: ~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/clean-architecture.md
+- Command Pattern: ~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/command-pattern.md
 
 **Tools:**
-- MCP Servers: ~/Documents/GitHub/fanduel-dev-knowledge/approved-tools/mcp-servers.md
+- MCP Servers: ~/Documents/GitHub/fanduel-ds-knowledge/approved-tools/mcp-servers.md
 ```
 
 ## Using with AI Tools
@@ -104,7 +103,6 @@ All Formation Design System documentation is extracted from official Figma files
 - **Sportsbook**: [Figma File](https://www.figma.com/design/DYIB18bksdl3DwHwBktUL7/%F0%9F%94%B5-Sportsbook-Theme-Extension)
 
 ### Technical Documentation
-- **Formation Storybook**: http://formation-storybook.s3-website-us-east-1.amazonaws.com/prod/react/
 - **Confluence Foundations**: https://fanduel.atlassian.net/wiki/spaces/FOR/pages/307655180988/Foundations
 - **Confluence Overview**: https://fanduel.atlassian.net/wiki/x/KwSfpkc
 
@@ -133,7 +131,7 @@ All Formation Design System documentation is extracted from official Figma files
 ## Structure
 
 ```
-fanduel-dev-knowledge/
+fanduel-ds-knowledge/
 ├── README.md (this file)
 ├── AGENTS.md (AI agent rules + full Formation token reference — auto-loaded by Claude Code)
 ├── figma-make/                   # Official Figma Make template + Formation rules for Make
@@ -150,7 +148,6 @@ fanduel-dev-knowledge/
 │   │   └── references/
 │   │       ├── core/             # colors, spacing, typography, radius, components, icons, icon-catalog
 │   │       ├── business-units/   # BU theme extensions (10 themes)
-│   │       ├── storybook-reference.md
 │   │       └── validation-rules.md
 │   ├── refresh-formation-tokens/ # Regenerate docs after token package update
 │   ├── validate-formation-usage/ # Audit code/Figma for DS compliance
@@ -206,7 +203,7 @@ Skills are procedural, task-oriented prompts — invoke them when you need to *d
 
 ### Reference skill (for token lookups)
 
-**`formation-design-system`** — Full Formation token reference (colors, spacing, typography, radius, all 13 themes, 50 components). Invoke with `/formation-design-system`.
+**`formation-design-system`** — Full Formation token reference (colors, spacing, typography, radius, all 13 themes, all components). Invoke with `/formation-design-system`.
 Location: `.agents/skills/formation-design-system/SKILL.md`
 
 ### Task skills

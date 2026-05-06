@@ -8,7 +8,7 @@ Comprehensive guide for integrating the FanDuel Development Knowledge Base into 
 
 **Step 1: Copy the Template**
 ```bash
-cp ~/Documents/GitHub/fanduel-dev-knowledge/templates/cursorrules-template.md \
+cp ~/Documents/GitHub/fanduel-ds-knowledge/templates/cursorrules-template.md \
    ~/Documents/GitHub/your-project/.cursorrules
 ```
 
@@ -30,16 +30,16 @@ Add to your project's `.cursorrules`:
 ## Shared FanDuel Knowledge
 
 **Formation DS:**
-- Colors: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/colors.md
-- Spacing: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/spacing.md
-- Typography: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/typography.md
+- Colors: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/colors.md
+- Spacing: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/spacing.md
+- Typography: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/typography.md
 
 **Architecture:**
-- Clean Architecture: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/clean-architecture.md
-- Command Pattern: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/command-pattern.md
+- Clean Architecture: ~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/clean-architecture.md
+- Command Pattern: ~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/command-pattern.md
 
 **Tools:**
-- MCP Servers: ~/Documents/GitHub/fanduel-dev-knowledge/approved-tools/mcp-servers.md
+- MCP Servers: ~/Documents/GitHub/fanduel-ds-knowledge/approved-tools/mcp-servers.md
 ```
 
 ## Integration Methods
@@ -62,8 +62,8 @@ Add to your project's `.cursorrules`:
 ```markdown
 ## Formation Design System
 When working with colors, spacing, or typography, reference:
-- ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/colors.md
-- ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/spacing.md
+- ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/colors.md
+- ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/spacing.md
 ```
 
 ### Method 2: Global Agent Skill
@@ -100,7 +100,7 @@ When working with colors, spacing, or typography, reference:
 
 **Example**:
 ```
-@~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/colors.md
+@~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/colors.md
 What colors should I use for error states?
 ```
 
@@ -112,17 +112,17 @@ What colors should I use for error states?
 ```markdown
 ## Project Setup
 Reference Formation tokens:
-- Colors: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/colors.md
-- Spacing: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/spacing.md
-- Typography: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/typography.md
-- Components: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/components.md
+- Colors: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/colors.md
+- Spacing: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/spacing.md
+- Typography: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/typography.md
+- Components: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/components.md
 ```
 
 #### Business Unit Projects
 Add BU-specific theme:
 ```markdown
 ## Sportsbook Theme
-- BU Theme: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/business-units/sportsbook.md
+- BU Theme: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/business-units/sportsbook.md
 ```
 
 #### Common Questions
@@ -135,12 +135,12 @@ Add BU-specific theme:
 #### Plugin Projects
 ```markdown
 ## Figma Plugin Development
-- Architecture: ~/Documents/GitHub/fanduel-dev-knowledge/figma-specific/plugin-architecture.md
-- Constraints: ~/Documents/GitHub/fanduel-dev-knowledge/figma-specific/plugin-constraints.md
+- Architecture: ~/Documents/GitHub/fanduel-ds-knowledge/figma-specific/plugin-architecture.md
+- Constraints: ~/Documents/GitHub/fanduel-ds-knowledge/figma-specific/plugin-constraints.md
 
 ## Reference Projects
-- Figma Super Powers: ~/Documents/GitHub/fanduel-dev-knowledge/fanduel-projects/figma-super-powers.md
-- Formation Check: ~/Documents/GitHub/fanduel-dev-knowledge/fanduel-projects/formation-check.md
+- Figma Super Powers: ~/Documents/GitHub/fanduel-ds-knowledge/fanduel-projects/figma-super-powers.md
+- Formation Check: ~/Documents/GitHub/fanduel-ds-knowledge/fanduel-projects/formation-check.md
 ```
 
 #### Reusable Patterns
@@ -159,14 +159,14 @@ Add BU-specific theme:
 #### Architecture Reference
 ```markdown
 ## Company Architecture Patterns
-- Clean Architecture: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/clean-architecture.md
-- Command Pattern: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/command-pattern.md
+- Clean Architecture: ~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/clean-architecture.md
+- Command Pattern: ~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/command-pattern.md
 ```
 
 #### MCP Tool Integration
 ```markdown
 ## Approved MCP Tools
-- MCP Servers: ~/Documents/GitHub/fanduel-dev-knowledge/approved-tools/mcp-servers.md
+- MCP Servers: ~/Documents/GitHub/fanduel-ds-knowledge/approved-tools/mcp-servers.md
 ```
 
 #### Common Questions
@@ -179,7 +179,7 @@ Add BU-specific theme:
 #### Tool Approval Reference
 ```markdown
 ## Security & Tools
-- Approved MCP Servers: ~/Documents/GitHub/fanduel-dev-knowledge/approved-tools/mcp-servers.md
+- Approved MCP Servers: ~/Documents/GitHub/fanduel-ds-knowledge/approved-tools/mcp-servers.md
 ```
 
 #### Common Questions
@@ -218,7 +218,7 @@ Add BU-specific theme:
 ### Maintenance
 
 **Knowledge Base Updates**:
-1. Pull latest changes: `cd ~/Documents/GitHub/fanduel-dev-knowledge && git pull`
+1. Pull latest changes: `cd ~/Documents/GitHub/fanduel-ds-knowledge && git pull`
 2. Review changes: `git log --oneline -10`
 3. Continue using - no project configuration changes needed
 
@@ -236,8 +236,8 @@ Add BU-specific theme:
 **Steps**:
 1. Load relevant token documentation:
    ```
-   @~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/colors.md
-   @~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/spacing.md
+   @~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/colors.md
+   @~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/spacing.md
    ```
 
 2. Ask AI to validate:
@@ -257,12 +257,12 @@ Add BU-specific theme:
 **Steps**:
 1. Start with template:
    ```bash
-   cp ~/Documents/GitHub/fanduel-dev-knowledge/templates/cursorrules-template.md .cursorrules
+   cp ~/Documents/GitHub/fanduel-ds-knowledge/templates/cursorrules-template.md .cursorrules
    ```
 
 2. Reference similar project:
    ```
-   @~/Documents/GitHub/fanduel-dev-knowledge/fanduel-projects/formation-check.md
+   @~/Documents/GitHub/fanduel-ds-knowledge/fanduel-projects/formation-check.md
    Build a plugin similar to formation-check but for [feature]
    ```
 
@@ -278,7 +278,7 @@ Add BU-specific theme:
 **Steps**:
 1. Load architecture documentation:
    ```
-   @~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/clean-architecture.md
+   @~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/clean-architecture.md
    ```
 
 2. Review example:
@@ -298,7 +298,7 @@ Add BU-specific theme:
 **Steps**:
 1. Check approved tools:
    ```
-   @~/Documents/GitHub/fanduel-dev-knowledge/approved-tools/mcp-servers.md
+   @~/Documents/GitHub/fanduel-ds-knowledge/approved-tools/mcp-servers.md
    ```
 
 2. Configure in project:
@@ -319,15 +319,15 @@ Add BU-specific theme:
 
 **Solution**:
 1. Check path is absolute: `~/Documents/GitHub/...`
-2. Verify file exists: `ls ~/Documents/GitHub/fanduel-dev-knowledge/`
-3. Pull latest: `cd ~/Documents/GitHub/fanduel-dev-knowledge && git pull`
+2. Verify file exists: `ls ~/Documents/GitHub/fanduel-ds-knowledge/`
+3. Pull latest: `cd ~/Documents/GitHub/fanduel-ds-knowledge && git pull`
 
 ### Outdated Information
 
 **Issue**: Documentation doesn't match current Figma files
 
 **Solution**:
-1. Check for updates: `cd ~/Documents/GitHub/fanduel-dev-knowledge && git pull`
+1. Check for updates: `cd ~/Documents/GitHub/fanduel-ds-knowledge && git pull`
 2. Report issue to Formation team
 3. Reference authoritative Figma files directly
 
@@ -345,7 +345,7 @@ Add BU-specific theme:
 **Issue**: Path references not working
 
 **Solution**:
-1. Ensure knowledge base is cloned: `~/Documents/GitHub/fanduel-dev-knowledge/`
+1. Ensure knowledge base is cloned: `~/Documents/GitHub/fanduel-ds-knowledge/`
 2. Use absolute paths starting with `~/`
 3. Check file permissions
 

@@ -11,18 +11,18 @@
 ## Shared FanDuel Knowledge
 
 **Formation Design System**:
-- Colors: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/colors.md
-- Spacing: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/spacing.md
-- Typography: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/typography.md
-- Radius: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/radius.md
-- Components: ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/components.md
+- Colors: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/colors.md
+- Spacing: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/spacing.md
+- Typography: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/typography.md
+- Radius: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/radius.md
+- Components: ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/components.md
 
 **Architecture Patterns**:
-- Clean Architecture: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/clean-architecture.md
-- Command Pattern: ~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/command-pattern.md
+- Clean Architecture: ~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/clean-architecture.md
+- Command Pattern: ~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/command-pattern.md
 
 **Approved Tools**:
-- MCP Servers: ~/Documents/GitHub/fanduel-dev-knowledge/approved-tools/mcp-servers.md
+- MCP Servers: ~/Documents/GitHub/fanduel-ds-knowledge/approved-tools/mcp-servers.md
 
 ## Project-Specific Context
 

@@ -97,17 +97,17 @@ npm run test:coverage
 
 ## Formation Design System
 
-This project follows the [Formation Design System](~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/README.md).
+This project follows the [Formation Design System](~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/README.md).
 
 **Key Tokens**:
 - Colors: Use Formation color tokens
 - Spacing: Use 4px grid system
-- Typography: Use Proxima Nova font family
+- Typography: Use Inter (Formation default). Proxima Nova only if your product is Sportsbook or Fantasy (licensed).
 - Components: Use Formation components when available
 
 ## Architecture
 
-This project follows [Clean Architecture](~/Documents/GitHub/fanduel-dev-knowledge/company-patterns/architecture/clean-architecture.md) principles:
+This project follows [Clean Architecture](~/Documents/GitHub/fanduel-ds-knowledge/company-patterns/architecture/clean-architecture.md) principles:
 
 - **Domain-Driven Design**: Code organized by business domains
 - **Command Pattern**: Operations as commands with handlers

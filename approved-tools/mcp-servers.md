@@ -102,7 +102,6 @@ fd-mcp-gateway install-remote-extension
 
 **Usage Example**:
 ```
-"Navigate to formation-storybook and find the Button component"
 "Test the search input on localhost:3000"
 "Click the submit button and check the result"
 ```

@@ -223,18 +223,9 @@ function showToast(message, type) {
 
 ```html
 <style>
-  :root {
-    --bg-base: #0A0A0A;
-    --bg-surface: #141414;
-    --content-default: #FFFFFF;
-    --content-subtle: #949494;
-    --brand-primary: #1493FF;
-    --system-positive: #00C853;
-    --system-alert: #FF3B30;
-    --space-2: 8px;
-    --space-4: 16px;
-    --radius-2: 8px;
-  }
+  /* Formation tokens — apply via data-theme attribute, not manual CSS variables */
+  /* See: @fanduel/formation-tokens for the full token set */
+  /* Example: <body data-theme="fanduel" data-mode="dark"> */
   
   body {
     background: var(--bg-base);

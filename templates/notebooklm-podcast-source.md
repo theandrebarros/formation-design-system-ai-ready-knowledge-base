@@ -254,8 +254,6 @@ For anyone new to this ecosystem, here are the essential terms.
 
 **Remix** — Copying a public Figma Make community file to your own Figma account so you can edit and experiment with it.
 
-**Storybook** — The interactive browser for all Formation components. Shows every variant, prop, and state with live examples. Available at `formation-storybook.s3-website-us-east-1.amazonaws.com`.
-
 **Adjust guidelines** — The option inside Figma Make's three-dot menu where you paste Formation AI rules. Used to update the official Formation template after a token bump.
 
 **data-theme** — HTML attribute that activates a specific business unit's design token overrides. Example: `data-theme="casino"` applies Casino-specific colors, gradients, and styles.

@@ -1,0 +1,38 @@
+---
+description: Non-negotiable rule for all FanDuel / Formation DS work — read the documentation before writing any code.
+alwaysApply: true
+---
+
+# Formation DS — Documentation First
+
+IMPORTANT: This is a non-negotiable rule. Never assume component structure, token values, or design patterns. Always read the source of truth first.
+
+## Before any Formation-related work
+
+1. Read the relevant documentation in `.agents/skills/formation-design-system/references/core/`:
+   - `components.md` — component catalog, HTML structure, token specs
+   - `colors.md` — color tokens and semantic aliases
+   - `typography.md` — type scale, font families, weights
+   - `spacing.md` — spacing scale
+   - `radius.md` — border-radius tokens
+2. For business-unit theming, also read `.agents/skills/formation-design-system/references/business-units/*.md`
+3. When implementing UI from Figma or making canvas edits, use the **local** Figma Console MCP (`figmaConsoleMcpLocal`) — this runs via `npx figma-console-mcp` on localhost and connects to the Desktop Bridge plugin over WebSocket. The remote southleft.com upstream is blocked by org policy.
+   - To read/inspect: call `figma_execute` with a read-only script returning node data
+   - To write/edit: call `figma_execute` with a mutating script
+   - Do NOT use `figma_get_file_data` or any tool that targets `https://figma-console-mcp.southleft.com/mcp` — these are policy-blocked
+4. Figma Core Components file key: `prQIPGE33uoH1SyxfVTFKT`
+
+## What is forbidden
+
+- IMPORTANT: Never invent token values, rgba workarounds, or approximate component structures
+- IMPORTANT: Never hardcode colors, spacing, or radii — always use Formation tokens
+- Never assume a component's HTML structure — read `components.md` or query Figma first
+- Never create light/dark mode variants of tokens that do not exist in Formation
+
+## Available skills (use them)
+
+- `formation-design-system` — look up any token, component spec, or theme value
+- `validate-formation-usage` — audit code or Figma for Formation compliance
+- `create-figma-plugin` — scaffold a new Figma plugin with Formation styling
+- `integrate-knowledge-base` — onboard a project to Formation (sets up .cursorrules)
+- `refresh-formation-tokens` — regenerate Formation docs after a package version bump

@@ -1,0 +1,177 @@
+# Formation Design System — Source Registry
+# Single source of truth for all external resources the sync pipeline touches.
+# Update this file when Figma files move, Confluence pages are added, or projects change.
+# Every script, workflow, and agent reads from here — never hardcode IDs elsewhere.
+
+# ---
+# FIGMA SOURCES
+# Auth: FIGMA_TOKEN env var (read-only PAT, stored in GitHub Actions secret)
+# ---
+figma:
+  variables:
+    fileKey: 9gJbs4Xti15jTaf3hsgrVS
+    description: "FANDUEL VARIABLE THEME — color/spacing tokens, all BU overrides"
+    url: "https://www.figma.com/design/9gJbs4Xti15jTaf3hsgrVS"
+
+  components:
+    fileKey: prQIPGE33uoH1SyxfVTFKT
+    description: "CORE COMPONENTS — component designs and variants"
+    url: "https://www.figma.com/design/prQIPGE33uoH1SyxfVTFKT"
+
+  typography:
+    fileKey: 524jb8ZmEXMGcb63bKQtTv
+    description: "TYPOGRAPHY LIBRARY — type styles, v3.0.0"
+    url: "https://www.figma.com/design/524jb8ZmEXMGcb63bKQtTv"
+
+  icons:
+    fileKey: 7y5OOtrBTHyJNbzvPp2GDm
+    description: "UI ICONS LIBRARY — 374 icons, 18 categories"
+    url: "https://www.figma.com/design/7y5OOtrBTHyJNbzvPp2GDm"
+
+  # Figma Make files — NO programmatic write API (Plugin API not supported in Make files).
+  # Update process: regenerate figma-make/figma-make-guidelines.md via pipeline,
+  # then a designer pastes it into the template via … > Adjust guidelines in the Figma UI.
+  make_template:
+    fileKey: 7zIyVB72qQuqW2gZSZFBiL
+    description: "Formation Powered Figma Make Template — official BU starting point"
+    url: "https://www.figma.com/make/7zIyVB72qQuqW2gZSZFBiL"
+    update_method: manual_paste
+    source_file: figma-make/figma-make-guidelines.md
+
+  make_glossary:
+    fileKey: ksmjFkqzmJEha0bmh0craZ
+    description: "Figma Make Template Glossary — showcase page"
+    url: "https://www.figma.com/make/ksmjFkqzmJEha0bmh0craZ"
+    update_method: manual_paste
+    source_file: figma-make/figma-make-guidelines.md
+
+# ---
+# CONFLUENCE PAGES
+# Cloud ID: 0bf6c0ec-bd17-4624-a17b-ec7588e91223 (fanduel.atlassian.net)
+# Space: FOR (spaceId: 307268255972)
+# Auth: CONFLUENCE_API_TOKEN env var
+# ARI format: ari:cloud:confluence:0bf6c0ec-bd17-4624-a17b-ec7588e91223:page/{pageId}
+#
+# SYNC CLASSIFICATION:
+#   embedded_tables — page contains hardcoded token tables; needs ADF push on every token update
+#   link_page — page only contains GitHub raw download links; auto-updates when branch is committed
+# ---
+confluence:
+  cloud_id: "0bf6c0ec-bd17-4624-a17b-ec7588e91223"
+  space_key: FOR
+  space_id: "307268255972"
+
+  pages:
+    ai_ready_kb:
+      pageId: "311405642557"
+      title: "Formation Design System AI-Ready Knowledge Base"
+      sync: embedded_tables
+      description: "Root page — Quick Reference token tables + download links index"
+      url: "https://fanduel.atlassian.net/wiki/spaces/FOR/pages/311405642557"
+
+    design_system:
+      pageId: "311404528368"
+      title: "Design System"
+      sync: embedded_tables
+      description: "Full token reference — spacing, radius, typography, colors, components, BU themes"
+      url: "https://fanduel.atlassian.net/wiki/spaces/FOR/pages/311404528368"
+
+    ai_prototyping_tools:
+      pageId: "311404954615"
+      title: "AI Prototyping Tools"
+      sync: link_page
+      description: "Figma Make, Coach, Lovable/Bolt context files — links to GitHub; no embedded tables"
+      url: "https://fanduel.atlassian.net/wiki/spaces/FOR/pages/311404954615"
+
+    tools:
+      pageId: "311404430605"
+      title: "Tools"
+      sync: link_page
+      description: "Approved MCP servers, fd-mcp-gateway, plugin architecture — static content"
+      url: "https://fanduel.atlassian.net/wiki/spaces/FOR/pages/311404430605"
+
+    projects:
+      pageId: "311404528387"
+      title: "FanDuel Projects"
+      sync: link_page
+      description: "Project index — links to raw GitHub specs; no embedded tables"
+      url: "https://fanduel.atlassian.net/wiki/spaces/FOR/pages/311404528387"
+
+    templates:
+      pageId: "311404561126"
+      title: "Templates"
+      sync: link_page
+      description: "cursorrules + project README templates — links only"
+      url: "https://fanduel.atlassian.net/wiki/spaces/FOR/pages/311404561126"
+
+    architecture:
+      pageId: "311405445866"
+      title: "Architecture"
+      sync: link_page
+      description: "Clean Architecture + Command Pattern — links to raw GitHub; no embedded tables"
+      url: "https://fanduel.atlassian.net/wiki/spaces/FOR/pages/311405445866"
+
+# ---
+# NPM PACKAGE (Formation Tokens)
+# Auth: ARTIFACTORY_TOKEN env var (confirm with platform team — may require self-hosted runner)
+# Current local snapshot: formation-tokens-source/ CSS files dated 2026-02-18 (~10 weeks stale)
+# ---
+npm:
+  package: "@fanduel/formation-tokens"
+  registry: "https://fanduel.jfrog.io/artifactory/api/npm/fd-npm/"
+  css_themes:
+    - fanduel-light
+    - fanduel-dark
+    - casino
+    - casino-dark
+    - sportsbook
+    - sportsbook-dark
+    - fantasy
+    - picks
+    - predicts
+    - racing
+    - faceoff
+    - poker
+    - mohegan-sun
+
+# ---
+# GITHUB (source repo — downstream of this file)
+# The Confluence download links already point at this branch, so every push auto-updates them.
+# ---
+github:
+  repo: "fanduel/formation-figma-plugins"
+  branch: "fanduel-ds-knowledge"
+  package_path: "packages/fanduel-ds-knowledge"
+  raw_base: "https://raw.githubusercontent.com/fanduel/formation-figma-plugins/fanduel-ds-knowledge/packages/fanduel-ds-knowledge"
+
+# ---
+# LOVABLE (WIP template)
+# Auth: Lovable project access (manual setup — no API today)
+# Sync: pipeline writes .lovable/rules/*.md → committed to branch → Lovable reads from GitHub
+# ---
+lovable:
+  project_id: "4f65ba10-5079-4026-9cfe-95233f085e36"
+  description: "WIP Lovable DS Template"
+  rules_dir: ".lovable/rules"
+  url: "https://lovable.dev/projects/4f65ba10-5079-4026-9cfe-95233f085e36"
+
+# ---
+# SLACK (drift alerts + failure notifications)
+# Auth: SLACK_WEBHOOK env var
+# Channel: #formation (flutter.enterprise.slack.com/archives/CCYKD7S4F)
+# ---
+slack:
+  channel: "#formation"
+  channel_id: CCYKD7S4F
+  workspace: flutter.enterprise.slack.com
+
+# ---
+# SECRETS REQUIRED IN GITHUB ACTIONS
+# Set these under repo Settings > Secrets and variables > Actions
+# ---
+# FIGMA_TOKEN           — Figma read-only PAT (Settings > Security > Personal access tokens)
+# CONFLUENCE_API_TOKEN  — Atlassian API token (id.atlassian.com > Security > API tokens)
+# CONFLUENCE_USER_EMAIL — andre.barros@fanduel.com
+# SLACK_WEBHOOK         — Incoming webhook URL for #formation
+# ARTIFACTORY_TOKEN     — Confirm with platform team: is CI read access available for @fanduel/npm?
+# GH_PAT                — GitHub PAT with repo:write scope (for opening PRs from Actions)

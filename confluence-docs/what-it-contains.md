@@ -14,12 +14,12 @@ Official tokens extracted from authoritative Figma files.
 - **System colors**: Positive, negative, alert, informational
 - **Border colors**: Default, subdued, hover states
 
-**Most Used**:
-- `brand/primary`: #1493FF (primary actions)
-- `background/surface`: #141414 (cards)
-- `content/default`: #FFFFFF (text)
-- `system/positive`: #00C853 (success)
-- `system/alert`: #FF3B30 (errors)
+**Key semantic tokens** (use token names — values resolve per theme):
+- `--fd-colors-background-surface` (cards, panels)
+- `--fd-colors-content-default` (primary text)
+- `--fd-colors-system-positive-background-default` (success)
+- `--fd-colors-system-important-background-default` (errors)
+- `--fd-colors-component-button-primary-background-base` (primary CTA button)
 
 #### Spacing (`formation-ds/core/spacing.md`)
 16 spacing tokens from `space0` (0px) to `space40` (160px) on 4px base grid.
@@ -31,24 +31,16 @@ Official tokens extracted from authoritative Figma files.
 - `space8`: 32px (section spacing)
 
 #### Typography (`formation-ds/core/typography.md`)
-- Font families: Proxima Nova, Proxima Nova Condensed
-- Font sizes: 12px to 56px
+- Font families: Inter (UI default), Roboto Condensed (labels/metadata), Shentox (display). Proxima Nova retained for Sportsbook and Fantasy only (licensed — Figma Typography Library v3.0.0)
+- Font sizes: 8px to 48px (13 sizes on a defined scale)
 - Font weights: 400 (regular), 600 (semibold), 700 (bold)
-- Text styles: Heading, body, button, metadata
-
-**Key Styles**:
-- Heading: 22px desktop, 16px mobile
-- Body: 14px
-- Button: 14px
-- Metadata: 12px (Proxima Nova Condensed)
+- Text styles: Jumbo, heading, body, label, button, metadata
 
 #### Radius (`formation-ds/core/radius.md`)
-5 border radius tokens:
-- `radius0`: 4px (small components)
-- `radius2`: 8px (buttons, inputs)
-- `radius4`: 16px (cards)
-- `radius6`: 24px (large containers)
-- `radius8`: 32px (special cases)
+6 border radius tokens (0, 2, 4, 8, 12, 16px). Component-specific tokens always override:
+- `--fd-radii-component-button-corner-radius`: 4px
+- `--fd-radii-component-card-corner-radius`: 4px
+- `--fd-radii-component-pill-corner-radius`: 9999px
 
 #### Components (`formation-ds/core/components.md`)
 Core component specifications and patterns for buttons, inputs, cards, modals, and more.
@@ -198,12 +190,6 @@ Standardized project documentation structure:
 
 ## Additional Resources
 
-### Storybook Reference (`formation-ds/storybook-reference.md`)
-Links and examples for Formation React components in Storybook.
-
-### Confluence Links (`formation-ds/confluence-links.md`)
-Additional Formation documentation on Confluence.
-
 ### Validation Rules (`formation-ds/validation-rules.md`)
 Rules for checking design system compliance.
 
@@ -220,7 +206,6 @@ All Formation Design System documentation is extracted from official Figma files
 Each BU has a dedicated Figma file with theme extensions (links in respective documentation).
 
 ### Technical Documentation
-- **Formation Storybook**: http://formation-storybook.s3-website-us-east-1.amazonaws.com/prod/react/
 - **Formation Confluence**: https://fanduel.atlassian.net/wiki/spaces/FOR/pages/307655180988/Foundations
 
 ## Usage Patterns

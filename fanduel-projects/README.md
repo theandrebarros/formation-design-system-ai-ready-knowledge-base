@@ -22,9 +22,6 @@ This folder documents patterns, architectures, and reusable logic from all FanDu
 ### ⚙️ Formation DS Automation
 - **[Formation Token Pipeline](formation-token-pipeline.md)** - Automated extraction pipeline that reads `@fanduel/formation-tokens` CSS, resolves all aliases to final values, and regenerates accurate docs for both Lovable and the Formation Design System AI-Ready Knowledge Base. Run `npm run all` to refresh everything in ~4 seconds.
 
-### 🔌 Proposed Integrations (Draft)
-- **[Storybook MCP Request](draft-storybook-mcp-request.md)** *(DRAFT — Pending Security Review)* - Security review request for integrating Storybook MCP to give AI agents machine-readable Formation component metadata. See also: [Confluence format](storybook-mcp-confluence-format.md) | [Strict template](storybook-mcp-strict-template.md)
-
 ## Common Patterns
 
 ### Architecture

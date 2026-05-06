@@ -1,0 +1,171 @@
+name: Publish to Confluence
+
+# Fires after a sync PR merges to main — pushes updated token tables to the
+# 2 Confluence pages that contain embedded content (not just download links).
+# The other 5 pages are link-only and auto-update via GitHub raw URLs on push.
+#
+# Can also be triggered manually with workflow_dispatch for ad-hoc republishing.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'confluence-docs/atlassian-mcp-batch/generated/**'
+  workflow_dispatch:
+    inputs:
+      page:
+        description: 'Which page to publish (leave empty for all)'
+        type: choice
+        options:
+          - all
+          - ai_ready_kb
+          - design_system
+        default: all
+
+concurrency:
+  group: publish-confluence
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # Require manual approval via a GitHub Environment before writing to Confluence.
+    # Set up: repo Settings > Environments > confluence-publish > add required reviewers.
+    environment: confluence-publish
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── Backup current Confluence content before overwriting ──────────────
+      - name: Backup current Confluence pages
+        env:
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+          CONFLUENCE_USER_EMAIL: ${{ secrets.CONFLUENCE_USER_EMAIL }}
+        run: |
+          mkdir -p confluence-docs/backups
+          DATE=$(date +%Y-%m-%d-%H%M)
+          CLOUD_ID="0bf6c0ec-bd17-4624-a17b-ec7588e91223"
+          AUTH=$(echo -n "${{ secrets.CONFLUENCE_USER_EMAIL }}:${{ secrets.CONFLUENCE_API_TOKEN }}" | base64)
+
+          for PAGE_ID in 311405642557 311404528368; do
+            curl -s \
+              -H "Authorization: Basic ${AUTH}" \
+              -H "Content-Type: application/json" \
+              "https://fanduel.atlassian.net/wiki/api/v2/pages/${PAGE_ID}?body-format=storage" \
+              > "confluence-docs/backups/${PAGE_ID}-${DATE}.json"
+            echo "Backed up page ${PAGE_ID}"
+          done
+
+      # ── Push AI-Ready KB (Root page — Quick Reference tables) ─────────────
+      - name: Publish AI-Ready KB (311405642557)
+        if: ${{ inputs.page == 'all' || inputs.page == 'ai_ready_kb' || inputs.page == '' }}
+        env:
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+          CONFLUENCE_USER_EMAIL: ${{ secrets.CONFLUENCE_USER_EMAIL }}
+        run: |
+          if [ ! -f "confluence-docs/atlassian-mcp-batch/generated/ai_ready_kb.json" ]; then
+            echo "No generated ADF for ai_ready_kb — skipping."
+            exit 0
+          fi
+
+          AUTH=$(echo -n "${{ secrets.CONFLUENCE_USER_EMAIL }}:${{ secrets.CONFLUENCE_API_TOKEN }}" | base64)
+          PAGE_ID="311405642557"
+
+          # Get current version number
+          CURRENT_VERSION=$(curl -s \
+            -H "Authorization: Basic ${AUTH}" \
+            "https://fanduel.atlassian.net/wiki/api/v2/pages/${PAGE_ID}" \
+            | node -e "let d=''; process.stdin.on('data',c=>d+=c); process.stdin.on('end',()=>console.log(JSON.parse(d).version.number))")
+
+          NEXT_VERSION=$((CURRENT_VERSION + 1))
+
+          # Build the update payload
+          node -e "
+            const fs = require('fs');
+            const adf = JSON.parse(fs.readFileSync('confluence-docs/atlassian-mcp-batch/generated/ai_ready_kb.json', 'utf8'));
+            const payload = {
+              id: '${PAGE_ID}',
+              status: 'current',
+              title: 'Formation Design System AI-Ready Knowledge Base',
+              version: { number: ${NEXT_VERSION} },
+              body: { representation: 'atlas_doc_format', value: JSON.stringify(adf) }
+            };
+            fs.writeFileSync('/tmp/ai_ready_kb_payload.json', JSON.stringify(payload));
+          "
+
+          curl -s -X PUT \
+            -H "Authorization: Basic ${AUTH}" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/ai_ready_kb_payload.json \
+            "https://fanduel.atlassian.net/wiki/api/v2/pages/${PAGE_ID}" \
+            | node -e "let d=''; process.stdin.on('data',c=>d+=c); process.stdin.on('end',()=>{const r=JSON.parse(d); console.log('Published version', r.version?.number, '—', r.title)})"
+
+      # ── Push Design System (full token tables) ────────────────────────────
+      - name: Publish Design System (311404528368)
+        if: ${{ inputs.page == 'all' || inputs.page == 'design_system' || inputs.page == '' }}
+        env:
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+          CONFLUENCE_USER_EMAIL: ${{ secrets.CONFLUENCE_USER_EMAIL }}
+        run: |
+          if [ ! -f "confluence-docs/atlassian-mcp-batch/generated/design_system.json" ]; then
+            echo "No generated ADF for design_system — skipping."
+            exit 0
+          fi
+
+          AUTH=$(echo -n "${{ secrets.CONFLUENCE_USER_EMAIL }}:${{ secrets.CONFLUENCE_API_TOKEN }}" | base64)
+          PAGE_ID="311404528368"
+
+          CURRENT_VERSION=$(curl -s \
+            -H "Authorization: Basic ${AUTH}" \
+            "https://fanduel.atlassian.net/wiki/api/v2/pages/${PAGE_ID}" \
+            | node -e "let d=''; process.stdin.on('data',c=>d+=c); process.stdin.on('end',()=>console.log(JSON.parse(d).version.number))")
+
+          NEXT_VERSION=$((CURRENT_VERSION + 1))
+
+          node -e "
+            const fs = require('fs');
+            const adf = JSON.parse(fs.readFileSync('confluence-docs/atlassian-mcp-batch/generated/design_system.json', 'utf8'));
+            const payload = {
+              id: '${PAGE_ID}',
+              status: 'current',
+              title: 'Design System',
+              version: { number: ${NEXT_VERSION} },
+              body: { representation: 'atlas_doc_format', value: JSON.stringify(adf) }
+            };
+            fs.writeFileSync('/tmp/design_system_payload.json', JSON.stringify(payload));
+          "
+
+          curl -s -X PUT \
+            -H "Authorization: Basic ${AUTH}" \
+            -H "Content-Type: application/json" \
+            -d @/tmp/design_system_payload.json \
+            "https://fanduel.atlassian.net/wiki/api/v2/pages/${PAGE_ID}" \
+            | node -e "let d=''; process.stdin.on('data',c=>d+=c); process.stdin.on('end',()=>{const r=JSON.parse(d); console.log('Published version', r.version?.number, '—', r.title)})"
+
+      # ── Success notification ───────────────────────────────────────────────
+      - name: Notify Slack on success
+        if: ${{ success() && secrets.SLACK_WEBHOOK != '' }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-type: application/json' \
+            --data "{
+              \"text\": \":white_check_mark: Confluence updated — Formation DS token tables published ${DATE}. <https://fanduel.atlassian.net/wiki/spaces/FOR/pages/311405642557|View AI-Ready KB>\"
+            }"
+
+      # ── Failure notification ───────────────────────────────────────────────
+      - name: Notify Slack on failure
+        if: ${{ failure() && secrets.SLACK_WEBHOOK != '' }}
+        run: |
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-type: application/json' \
+            --data "{
+              \"text\": \":x: Confluence publish FAILED. Markdown docs in the repo are correct — only Confluence is lagging. <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run>\"
+            }"

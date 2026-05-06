@@ -16,7 +16,7 @@ This knowledge base serves as:
 ## Structure
 
 ```
-fanduel-dev-knowledge/
+fanduel-ds-knowledge/
 ├── formation-ds/           # Formation Design System
 │   ├── core/              # Colors, spacing, typography, radius
 │   └── business-units/    # Casino, Sportsbook, Picks, etc.
@@ -55,15 +55,15 @@ fanduel-dev-knowledge/
 ### 1. Centralized Repository
 All shared knowledge lives in a single repository:
 ```
-~/Documents/GitHub/fanduel-dev-knowledge/
+~/Documents/GitHub/fanduel-ds-knowledge/
 ```
 
 ### 2. Project Integration
 Projects reference the knowledge base via `.cursorrules`:
 ```markdown
 ## Formation Design System
-**Colors:** ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/colors.md
-**Spacing:** ~/Documents/GitHub/fanduel-dev-knowledge/formation-ds/core/spacing.md
+**Colors:** ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/colors.md
+**Spacing:** ~/Documents/GitHub/fanduel-ds-knowledge/formation-ds/core/spacing.md
 ```
 
 ### 3. On-Demand Loading
@@ -106,8 +106,7 @@ See the following pages for detailed information:
 
 ## Related Resources
 
-- **GitHub Repository**: `~/Documents/GitHub/fanduel-dev-knowledge/`
-- **Formation Storybook**: http://formation-storybook.s3-website-us-east-1.amazonaws.com/prod/react/
+- **GitHub Repository**: `~/Documents/GitHub/fanduel-ds-knowledge/`
 - **Formation Confluence**: https://fanduel.atlassian.net/wiki/spaces/FOR/pages/307655180988/Foundations
 
 ---

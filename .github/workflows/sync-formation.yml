@@ -1,0 +1,212 @@
+name: Sync Formation Tokens
+
+# Runs weekdays at 06:00 UTC (before EU and US standups).
+# Can also be triggered manually via workflow_dispatch, or by a
+# repository_dispatch event from the formation-token-pipeline repo.
+on:
+  schedule:
+    - cron: '0 6 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run — generate files but do not open a PR'
+        type: boolean
+        default: false
+  repository_dispatch:
+    types: [formation-tokens-updated]
+
+# Prevent overlapping runs. If a sync is already in progress, wait for it —
+# never cancel because a partial sync can leave files in an inconsistent state.
+concurrency:
+  group: formation-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout fanduel-ds-knowledge
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+          fetch-depth: 0
+
+      # ── Locate the pipeline repo ──────────────────────────────────────────
+      # The pipeline lives in fanduel/formation-figma-plugins under packages/.
+      # We check it out next to this repo.
+      - name: Checkout formation-token-pipeline
+        uses: actions/checkout@v4
+        with:
+          repository: fanduel/formation-figma-plugins
+          ref: fanduel-ds-knowledge
+          token: ${{ secrets.GH_PAT }}
+          path: formation-figma-plugins
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: formation-figma-plugins/packages/formation-token-pipeline/package-lock.json
+
+      - name: Install pipeline dependencies
+        working-directory: formation-figma-plugins/packages/formation-token-pipeline
+        run: npm ci
+
+      # ── Fetch npm tokens (Path A — requires ARTIFACTORY_TOKEN) ────────────
+      # If Artifactory CI token is not available, this step is skipped and the
+      # pipeline falls back to the existing formation-tokens-source/ snapshot.
+      - name: Fetch latest @fanduel/formation-tokens from Artifactory
+        if: ${{ secrets.ARTIFACTORY_TOKEN != '' }}
+        working-directory: formation-figma-plugins/packages/formation-token-pipeline
+        env:
+          ARTIFACTORY_TOKEN: ${{ secrets.ARTIFACTORY_TOKEN }}
+        run: |
+          echo "//fanduel.jfrog.io/artifactory/api/npm/fd-npm/:_authToken=${ARTIFACTORY_TOKEN}" >> .npmrc
+          npm install @fanduel/formation-tokens@latest --save-exact
+          # Extract CSS files to formation-tokens-source/
+          node -e "
+            const pkg = require('./node_modules/@fanduel/formation-tokens');
+            const fs = require('fs');
+            const path = require('path');
+            const src = path.dirname(require.resolve('@fanduel/formation-tokens'));
+            const dest = './formation-tokens-source';
+            fs.mkdirSync(dest, { recursive: true });
+            fs.readdirSync(src).filter(f => f.endsWith('.css')).forEach(f => {
+              fs.copyFileSync(path.join(src, f), path.join(dest, f));
+            });
+            console.log('Extracted CSS for version:', require('./node_modules/@fanduel/formation-tokens/package.json').version);
+          "
+
+      # ── Wire the symlink so cursor.ts writes to the checked-out repo ─────
+      # Locally, ~/.cursor/skills/formation-design-system is a symlink into the repo.
+      # In CI that symlink doesn't exist — create it so generateCursor() writes to
+      # the correct checkout path rather than a non-existent home directory path.
+      - name: Create ~/.cursor/skills symlink
+        run: |
+          mkdir -p ~/.cursor/skills
+          ln -sf "$GITHUB_WORKSPACE/.agents/skills/formation-design-system" \
+                 ~/.cursor/skills/formation-design-system
+
+      # ── Run the full pipeline ─────────────────────────────────────────────
+      - name: Run formation-token-pipeline
+        working-directory: formation-figma-plugins/packages/formation-token-pipeline
+        env:
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+        run: |
+          npm run all
+          # Write a dated snapshot for audit trail
+          DATE=$(date +%Y-%m-%d)
+          cp canonical/code-tokens.json "canonical/code-tokens-${DATE}.json"
+          cp canonical/design-tokens.json "canonical/design-tokens-${DATE}.json"
+
+      # ── Drift check ───────────────────────────────────────────────────────
+      # Compares Figma variable values against resolved npm token values.
+      # Writes drift-report.md. Never fails the workflow — posts to Slack instead.
+      - name: Check Figma vs npm drift
+        working-directory: formation-figma-plugins/packages/formation-token-pipeline
+        env:
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+        continue-on-error: true
+        id: drift
+        run: |
+          npm run check:drift 2>&1 | tee drift-report.md
+          echo "drift_count=$(grep -c '^DRIFT' drift-report.md || echo 0)" >> "$GITHUB_OUTPUT"
+
+      - name: Post drift alert to Slack
+        if: ${{ steps.drift.outputs.drift_count > 0 && secrets.SLACK_WEBHOOK != '' }}
+        run: |
+          DRIFT_COUNT=${{ steps.drift.outputs.drift_count }}
+          DATE=$(date +%Y-%m-%d)
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-type: application/json' \
+            --data "{
+              \"text\": \":warning: Formation sync ${DATE}: *${DRIFT_COUNT} token(s)* differ between Figma and the npm package. Docs updated with Figma values. <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|View run> for details.\"
+            }"
+
+      # ── Copy generated files into this repo ──────────────────────────────
+      - name: Copy generated docs to fanduel-ds-knowledge
+        run: |
+          PIPELINE="formation-figma-plugins/packages/formation-token-pipeline"
+          KNOWLEDGE="."
+
+          # Core token references
+          cp -f "${PIPELINE}/output/cursor/core/"*.md "${KNOWLEDGE}/.agents/skills/formation-design-system/references/core/" 2>/dev/null || true
+          cp -f "${PIPELINE}/output/cursor/business-units/"*.md "${KNOWLEDGE}/.agents/skills/formation-design-system/references/business-units/" 2>/dev/null || true
+
+          # AGENTS.md version banner (pipeline stamps the version line)
+          if [ -f "${PIPELINE}/output/cursor/AGENTS-banner.md" ]; then
+            node -e "
+              const fs = require('fs');
+              let agents = fs.readFileSync('${KNOWLEDGE}/AGENTS.md', 'utf8');
+              const banner = fs.readFileSync('${PIPELINE}/output/cursor/AGENTS-banner.md', 'utf8').trim();
+              agents = agents.replace(/^> Formation DS.*$/m, banner);
+              fs.writeFileSync('${KNOWLEDGE}/AGENTS.md', agents);
+            "
+          fi
+
+          # Lovable rules
+          cp -f "${PIPELINE}/output/lovable/"*.md "${KNOWLEDGE}/.lovable/rules/" 2>/dev/null || true
+
+          # Figma Make guidelines (designer pastes this into Adjust guidelines)
+          cp -f "${PIPELINE}/output/figma-make/figma-make-guidelines.md" "${KNOWLEDGE}/figma-make/figma-make-guidelines.md" 2>/dev/null || true
+
+          # Coach reference (self-contained Formation reference for coding AIs)
+          cp -f "${PIPELINE}/output/cursor/coach/formation-reference.md" "${KNOWLEDGE}/coach/formation-reference.md" 2>/dev/null || true
+
+          # Confluence ADF payloads (for the 2 pages with embedded token tables)
+          cp -f "${PIPELINE}/output/confluence/"*.json "${KNOWLEDGE}/confluence-docs/atlassian-mcp-batch/generated/" 2>/dev/null || true
+
+      # ── Check if anything changed ─────────────────────────────────────────
+      - name: Check for changes
+        id: changes
+        run: |
+          git diff --quiet && echo "changed=false" >> "$GITHUB_OUTPUT" || echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # ── Open PR ───────────────────────────────────────────────────────────
+      # PR body is templated from .github/sync-pr-body.md to keep multi-line
+      # markdown out of this YAML file (avoids linter false-positives on ---, **, etc.)
+      - name: Open sync PR
+        if: ${{ steps.changes.outputs.changed == 'true' && inputs.dry_run != true }}
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+          DRIFT_COUNT: ${{ steps.drift.outputs.drift_count || 0 }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          BRANCH="sync/formation-tokens-${DATE}"
+          COMMIT_MSG="chore(sync): Formation tokens ${DATE} — source: Figma 9gJbs4Xti15jTaf3hsgrVS"
+
+          git config user.name "formation-sync[bot]"
+          git config user.email "andre.barros@fanduel.com"
+          git checkout -b "${BRANCH}"
+          git add .agents/skills/formation-design-system/references/ AGENTS.md figma-make/figma-make-guidelines.md coach/formation-reference.md confluence-docs/atlassian-mcp-batch/generated/ .lovable/rules/ 2>/dev/null || true
+          git commit -m "${COMMIT_MSG}"
+          git push origin "${BRANCH}"
+
+          RUN_URL="https://github.com/${REPO}/actions/runs/${RUN_ID}"
+          WORKFLOW_URL="https://github.com/${REPO}/actions/workflows/sync-formation.yml"
+          if [ "${DRIFT_COUNT}" -gt 0 ]; then
+            DRIFT_SECTION="**Drift detected:** ${DRIFT_COUNT} token(s) differ between Figma and the npm package. This PR uses Figma values. Ask the DS team to publish an updated npm release."
+          else
+            DRIFT_SECTION="No drift detected between Figma and npm package."
+          fi
+
+          sed -e "s|{{DATE}}|${DATE}|g" \
+              -e "s|{{RUN_URL}}|${RUN_URL}|g" \
+              -e "s|{{WORKFLOW_URL}}|${WORKFLOW_URL}|g" \
+              -e "s|{{DRIFT_SECTION}}|${DRIFT_SECTION}|g" \
+              .github/sync-pr-body.md > /tmp/pr_body.md
+
+          gh pr create \
+            --title "chore(sync): Formation tokens ${DATE}" \
+            --body-file /tmp/pr_body.md \
+            --base main \
+            --head "${BRANCH}"
+
+      - name: No changes detected
+        if: ${{ steps.changes.outputs.changed == 'false' }}
+        run: echo "✅ Formation docs are already up to date with Figma. No PR needed."

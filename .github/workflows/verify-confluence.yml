@@ -1,0 +1,73 @@
+name: Verify Confluence Integrity
+
+# Runs weekly (Monday 07:00 UTC) — reads each managed Confluence page back and
+# checks whether anyone has hand-edited it since the last pipeline push.
+# Diffs are posted to Slack. No changes are made to Confluence.
+on:
+  schedule:
+    - cron: '0 7 * * 1'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch and compare managed pages
+        id: compare
+        env:
+          CONFLUENCE_API_TOKEN: ${{ secrets.CONFLUENCE_API_TOKEN }}
+          CONFLUENCE_USER_EMAIL: ${{ secrets.CONFLUENCE_USER_EMAIL }}
+        run: |
+          AUTH=$(echo -n "${{ secrets.CONFLUENCE_USER_EMAIL }}:${{ secrets.CONFLUENCE_API_TOKEN }}" | base64)
+          MISMATCHES=""
+
+          for PAGE_ID in 311405642557 311404528368; do
+            # Fetch current Confluence version
+            CURRENT=$(curl -s \
+              -H "Authorization: Basic ${AUTH}" \
+              "https://fanduel.atlassian.net/wiki/api/v2/pages/${PAGE_ID}" \
+              | node -e "let d=''; process.stdin.on('data',c=>d+=c); process.stdin.on('end',()=>{const r=JSON.parse(d); console.log(r.version?.number + '|' + r.title)})")
+
+            # Compare version against last-known push (stored in backups/)
+            LAST_BACKUP=$(ls -1 "confluence-docs/backups/${PAGE_ID}-"*.json 2>/dev/null | sort | tail -1)
+            if [ -n "$LAST_BACKUP" ]; then
+              LAST_VERSION=$(node -e "const f=require('${LAST_BACKUP}'); console.log(f.version?.number || 'unknown')" 2>/dev/null || echo "unknown")
+              CURRENT_VERSION=$(echo "$CURRENT" | cut -d'|' -f1)
+              TITLE=$(echo "$CURRENT" | cut -d'|' -f2)
+
+              if [ "$CURRENT_VERSION" != "$LAST_VERSION" ]; then
+                MISMATCHES="${MISMATCHES}\n• *${TITLE}* (page ${PAGE_ID}): Confluence v${CURRENT_VERSION} vs last push v${LAST_VERSION}"
+              fi
+            fi
+          done
+
+          if [ -n "$MISMATCHES" ]; then
+            echo "mismatches=true" >> "$GITHUB_OUTPUT"
+            printf '%b' "${MISMATCHES}" > /tmp/mismatches.txt
+          else
+            echo "mismatches=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Alert Slack — manual edits detected
+        if: ${{ steps.compare.outputs.mismatches == 'true' && secrets.SLACK_WEBHOOK != '' }}
+        run: |
+          MISMATCHES=$(cat /tmp/mismatches.txt)
+          curl -s -X POST "${{ secrets.SLACK_WEBHOOK }}" \
+            -H 'Content-type: application/json' \
+            --data "{
+              \"text\": \":eyes: Confluence integrity check: pages have been manually edited since last pipeline push.\n${MISMATCHES}\n\nNext sync will overwrite manual edits with pipeline output. To preserve them, update the Figma file or this repo's source Markdown instead.\"
+            }"
+
+      - name: All pages match last push
+        if: ${{ steps.compare.outputs.mismatches == 'false' }}
+        run: echo "✅ All managed Confluence pages match last pipeline push. No manual edits detected."

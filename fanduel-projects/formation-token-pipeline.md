@@ -65,7 +65,6 @@ formation-token-pipeline/
 ### Component Agent (`components.ts`)
 - Extracts all `--fd-colors-component-*` and `--fd-radii-component-*` tokens
 - Covers: button (6 variants), pill, tab, data-input (TextField), selection-control (Checkbox/Radio)
-- Embeds the full 50-component Storybook catalog
 - Documents semantic-token-based components: Card, Badge, Tag, Notifications, Avatar, Loader
 - Outputs `canonical/components.json`
 
@@ -182,12 +181,6 @@ state:     base | hover | active | disabled | selected | error | success
 - Building other token extraction or documentation pipelines
 - Troubleshooting incorrect token values in Lovable or Cursor docs
 - Understanding the Figma variable name → CSS variable name convention
-
-## Storybook Catalog Reference
-
-Storybook: `http://formation-storybook.s3-website-us-east-1.amazonaws.com/prod/react/`
-
-50 entries: Avatar, Badge, Button, Card, Checkbox, DataChunk, DatePicker, Icon, Image, Layout (4), Loader, Notifications (4), Pill, PillGroup, ProgressBar, RadioButton, SelectField, Switch, Tabs, Tag, TagGroup, TextField, Typography (6), Primitives (5), useBreakpoint
 
 ---
 
