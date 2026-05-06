@@ -274,5 +274,7 @@ requestAnimationFrame(bindLabelHover);
     $sections.style.transition = '';
     updateUI();
     activateVideo(startIndex);
+    /* Preload all other video slides so the placeholder doesn't flash on first visit */
+    SECTIONS.forEach((s, i) => { if (s.video && i !== startIndex) getOrCreateVideo(i); });
   });
 })();
