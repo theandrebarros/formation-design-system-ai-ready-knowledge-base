@@ -24,6 +24,10 @@ const $dotsContainer = document.getElementById('nav-dots');
 const $toc = document.getElementById('toc');
 const $btnPrev = document.getElementById('btn-prev');
 const $btnNext = document.getElementById('btn-next');
+const $fabPrev = document.getElementById('fab-prev');
+const $fabNext = document.getElementById('fab-next');
+
+const mobileQuery = window.matchMedia('(max-width: 900px)');
 
 /* ─── Build nav dots ─────────────────────────────────────────────────────── */
 SECTIONS.forEach((_, i) => {
@@ -160,27 +164,24 @@ function goTo(next, direction) {
   const dir = direction !== undefined ? direction : (next > current ? 1 : -1);
   const leaving = current;
 
-  /* Animate leaving section */
-  const $leaving = document.querySelector(`[data-index="${leaving}"]`);
   const $entering = document.querySelector(`[data-index="${next}"]`);
-
-  if ($entering) {
-    $entering.classList.add(dir > 0 ? 'entering-from-right' : 'entering-from-left');
-    /* Force reflow so class is recognized before transition starts */
-    void $entering.offsetWidth;
-  }
 
   current = next;
 
-  /* Slide the container */
-  $sections.style.transform = `translateX(${-current * 100}vw)`;
-
-  /* Trigger enter animation on the new section */
-  requestAnimationFrame(() => {
+  if (mobileQuery.matches) {
+    /* On mobile sections are stacked — scroll the target into view */
+    if ($entering) $entering.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    /* Desktop: animate enter class then slide the container */
     if ($entering) {
-      $entering.classList.remove('entering-from-right', 'entering-from-left');
+      $entering.classList.add(dir > 0 ? 'entering-from-right' : 'entering-from-left');
+      void $entering.offsetWidth;
     }
-  });
+    $sections.style.transform = `translateX(${-current * 100}vw)`;
+    requestAnimationFrame(() => {
+      if ($entering) $entering.classList.remove('entering-from-right', 'entering-from-left');
+    });
+  }
 
   deactivateVideo(leaving);
   activateVideo(next);
@@ -200,9 +201,13 @@ function updateUI() {
     item.classList.toggle('active', i === current);
   });
 
-  /* Prev/Next buttons */
+  /* Prev/Next buttons (desktop nav bar) */
   $btnPrev.disabled = current === 0;
   $btnNext.disabled = current === TOTAL - 1;
+
+  /* Mobile FAB */
+  if ($fabPrev) $fabPrev.disabled = current === 0;
+  if ($fabNext) $fabNext.disabled = current === TOTAL - 1;
 }
 
 /* ─── Hash sync ──────────────────────────────────────────────────────────── */
@@ -238,6 +243,29 @@ document.addEventListener('keydown', e => {
 /* ─── Button listeners ───────────────────────────────────────────────────── */
 $btnPrev.addEventListener('click', () => goTo(current - 1, -1));
 $btnNext.addEventListener('click', () => goTo(current + 1, 1));
+
+/* ─── Mobile FAB listeners ───────────────────────────────────────────────── */
+if ($fabPrev) $fabPrev.addEventListener('click', () => goTo(current - 1, -1));
+if ($fabNext) $fabNext.addEventListener('click', () => goTo(current + 1, 1));
+
+/* ─── Touch swipe handler (mobile only) ─────────────────────────────────── */
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].clientX;
+  touchStartY = e.changedTouches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+  if (!mobileQuery.matches) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+  /* Only trigger if horizontal swipe dominates and exceeds threshold */
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+    goTo(dx < 0 ? current + 1 : current - 1, dx < 0 ? 1 : -1);
+  }
+}, { passive: true });
 
 /* ─── goTo exposed to inline HTML ────────────────────────────────────────── */
 window.goTo = goTo;

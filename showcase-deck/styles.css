@@ -314,6 +314,9 @@ html, body {
 
 .heading-xl--white { color: #fff; }
 
+/* Section chapter/overview headings — larger than heading-xl on desktop */
+.heading-section { font-size: 40px; }
+
 .heading-lg {
   font-size: 22px;
   font-weight: 700;
@@ -503,7 +506,15 @@ html, body {
   z-index: 10;
 }
 
-.video-frame:hover .video-controls { opacity: 1; }
+@media (hover: hover) {
+  .video-frame:hover .video-controls { opacity: 1; }
+}
+
+@media (hover: none) {
+  .video-controls { opacity: 1; visibility: visible; }
+  .video-ctrl-btn { width: 44px; height: 44px; }
+  .pane-right::after { content: "Tap ⤢ to fullscreen"; }
+}
 
 .video-ctrl-btn {
   width: 36px;
@@ -872,6 +883,31 @@ html, body {
   .section--cover .pane-left, .section--chapter-break .pane-left { width: 100%; }
   #toc { display: none; }
   #nav-bar { display: none; }
+
+  /* "Press → or Space" is irrelevant on touch */
+  .cover-keyboard-hint,
+  .cover-keyboard-hint-spacer { display: none; }
+
+  /* Cover stays full-screen on mobile. We pin pane-left absolutely so its
+     own flex centering works regardless of what the parent .section's
+     padding-bottom and flex direction do. */
+  .section--cover {
+    position: relative;
+    height: 100svh;
+    min-height: 100svh;
+    padding: 0;            /* override .section padding-bottom: 80px */
+    overflow: hidden;
+  }
+  #section-1 .pane-left {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 24px 96px; /* bottom clears the FAB */
+  }
   .heading-jumbo { font-size: 32px; }
   .heading-xl { font-size: 24px; }
 }
@@ -1113,4 +1149,109 @@ svg { display: block; }
   font-size: 11px;
   opacity: 0.65;
   font-style: italic;
+}
+
+/* ─── Tablet / small-phone tier (≤640px) ────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Typography */
+  .heading-cover { font-size: 48px; }
+  .heading-jumbo { font-size: 28px; }
+  .heading-xl { font-size: 20px; }
+  .body-lg { font-size: 16px; }
+  .heading-section { font-size: 30px !important; }
+
+  /* Feature grid: collapse to 1 column */
+  .feature-grid { grid-template-columns: 1fr; }
+
+  /* Step flow: stack cards vertically, hide horizontal connectors */
+  .step-flow { flex-direction: column; }
+  .step-connector { display: none; }
+
+  /* How-it-works cards: full width */
+  .how-it-works-card { min-width: 100%; max-width: 100%; }
+
+  /* Guidelines disclosure: wrap toolbar, soften pre block */
+  .guidelines-disclosure__toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .guidelines-tabs {
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .guidelines-disclosure__code {
+    white-space: pre-wrap;
+    font-size: 11px;
+    max-height: 260px;
+    margin: 0 6px;
+  }
+  .guidelines-tab { min-height: 36px; }
+  .btn { min-height: 44px; }
+}
+
+/* ─── Small-phone tier (≤480px) ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  /* Typography */
+  .heading-cover { font-size: 36px; }
+  .heading-jumbo { font-size: 24px; }
+  .heading-xl { font-size: 18px; }
+  .heading-section { font-size: 26px !important; }
+
+  /* Tighter pane padding */
+  .pane-left { padding: 32px 20px 20px !important; }
+  .pane-right { padding: 0 20px 36px !important; }
+
+  /* CTA row: stack full-width */
+  .cta-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--fd-space-space-3);
+  }
+  .btn--cta {
+    width: 100%;
+    height: 44px !important;
+    font-size: 15px !important;
+    padding: 0 20px !important;
+    justify-content: center;
+  }
+}
+
+/* ─── Mobile FAB navigation (visible ≤900px) ────────────────────────────── */
+.mobile-fab {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mobile-fab {
+    display: flex;
+    position: fixed;
+    bottom: 20px;
+    right: 16px;
+    gap: 10px;
+    z-index: 100;
+  }
+
+  .mobile-fab__btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(20, 20, 30, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(12px);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 150ms ease, opacity 150ms ease, transform 100ms ease;
+    padding: 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+
+  .mobile-fab__btn:hover { background: rgba(40, 40, 55, 0.95); }
+  .mobile-fab__btn:active { transform: scale(0.92); }
+  .mobile-fab__btn:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
 }
