@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "showcase-deck/**"
+      - "figma-make/figma-make-guidelines.md"
       - ".github/workflows/deploy-showcase-deck.yml"
   workflow_dispatch:
 
@@ -30,6 +31,9 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+
+      - name: Sync guidelines.md from source
+        run: ./showcase-deck/sync-guidelines.sh
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3

@@ -262,6 +262,94 @@ function bindLabelHover() {
 /* Run after TOC items are built (same tick) */
 requestAnimationFrame(bindLabelHover);
 
+/* ─── Guidelines.md disclosure (Overview slide) ─────────────────────────── */
+(function setupGuidelinesDisclosure() {
+  const disclosure = document.querySelector('.guidelines-disclosure');
+  if (!disclosure) return;
+
+  const codeEl = document.getElementById('guidelines-code');
+  const copyBtn = document.getElementById('guidelines-copy');
+  const copyLabel = document.getElementById('guidelines-copy-label');
+  const metaEl = document.getElementById('guidelines-meta');
+  const hintEl = document.getElementById('guidelines-hint');
+  const tabs = disclosure.querySelectorAll('.guidelines-tab');
+
+  const HINTS = {
+    'figma-make': 'Paste into <strong>Figma Make</strong> → <code>...</code> menu → <strong>Adjust guidelines</strong>',
+    'lovable':    'Paste into <strong>Lovable</strong> → project settings → <strong>Knowledge</strong> (or system prompt)<span class="hint-note">Same Formation rules — only the injection point differs.</span>',
+  };
+
+  function activateTab(tool) {
+    tabs.forEach(btn => {
+      const active = btn.dataset.tool === tool;
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-selected', String(active));
+    });
+    if (hintEl) hintEl.innerHTML = HINTS[tool] || '';
+  }
+
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => activateTab(btn.dataset.tool));
+  });
+
+  /* Set default hint on first paint */
+  activateTab('figma-make');
+
+  let loaded = false;
+  let raw = '';
+
+  function applyContent(text) {
+    raw = text;
+    codeEl.textContent = text;
+    const sizeKb = (new Blob([text]).size / 1024).toFixed(1);
+    const lineCount = text.split('\n').length;
+    if (metaEl) metaEl.textContent = `${sizeKb} KB · ${lineCount} lines · Markdown`;
+  }
+
+  function readInline() {
+    const inline = document.getElementById('guidelines-source');
+    if (!inline) return null;
+    let text = inline.textContent || '';
+    text = text
+      .replace(/^\s*<!--\s*GUIDELINES_BEGIN\s*-->\s*\n?/, '')
+      .replace(/\n?\s*<!--\s*GUIDELINES_END\s*-->\s*$/, '')
+      .replace(/<\\\/script>/g, '</script>');
+    return text.trim() ? text : null;
+  }
+
+  function loadOnce() {
+    if (loaded) return;
+    loaded = true;
+
+    const inline = readInline();
+    if (inline) { applyContent(inline); return; }
+
+    fetch('guidelines.md')
+      .then(r => { if (!r.ok) throw new Error(r.status); return r.text(); })
+      .then(applyContent)
+      .catch(() => {
+        codeEl.textContent = 'Could not load guidelines.md. Use the "Download raw file" link instead.';
+      });
+  }
+
+  disclosure.addEventListener('toggle', () => { if (disclosure.open) loadOnce(); });
+
+  copyBtn.addEventListener('click', async () => {
+    if (!raw) { loadOnce(); return; }
+    try {
+      await navigator.clipboard.writeText(raw);
+      copyBtn.classList.add('is-copied');
+      copyLabel.textContent = 'Copied!';
+      setTimeout(() => {
+        copyBtn.classList.remove('is-copied');
+        copyLabel.textContent = 'Copy to clipboard';
+      }, 1800);
+    } catch {
+      copyLabel.textContent = 'Copy failed — use Download';
+    }
+  });
+})();
+
 /* ─── Init ───────────────────────────────────────────────────────────────── */
 (function init() {
   const startIndex = readHash();
