@@ -31,3 +31,6 @@ Temporary Items
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local source media not meant for publishing
+showcase-deck/videos/AdobeStock_433164285.mov
