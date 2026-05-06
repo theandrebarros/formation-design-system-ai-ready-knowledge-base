@@ -1164,8 +1164,13 @@ svg { display: block; }
   .feature-grid { grid-template-columns: 1fr; }
 
   /* Step flow: stack cards vertically, hide horizontal connectors */
-  .step-flow { flex-direction: column; }
+  .step-flow {
+    flex-direction: column;
+    gap: var(--fd-space-space-3);
+    margin: var(--fd-space-space-4) 0;
+  }
   .step-connector { display: none; }
+  .step-card { padding: var(--fd-space-space-4); }
 
   /* How-it-works cards: full width */
   .how-it-works-card { min-width: 100%; max-width: 100%; }

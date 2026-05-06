@@ -248,6 +248,38 @@ $btnNext.addEventListener('click', () => goTo(current + 1, 1));
 if ($fabPrev) $fabPrev.addEventListener('click', () => goTo(current - 1, -1));
 if ($fabNext) $fabNext.addEventListener('click', () => goTo(current + 1, 1));
 
+/* ─── IntersectionObserver: keep `current` in sync with scroll on mobile ── */
+const sectionEls = Array.from(document.querySelectorAll('.section[data-index]'));
+
+/* Track each section's current intersection ratio so we can always find the winner */
+const sectionRatios = new Map(sectionEls.map(el => [el, 0]));
+
+const visibilityObserver = new IntersectionObserver(entries => {
+  if (!mobileQuery.matches) return;
+
+  /* Update ratios for any section whose visibility just changed */
+  entries.forEach(entry => sectionRatios.set(entry.target, entry.intersectionRatio));
+
+  /* Find the section with the most screen real-estate */
+  let bestEl = null;
+  let bestRatio = 0;
+  sectionRatios.forEach((ratio, el) => {
+    if (ratio > bestRatio) { bestRatio = ratio; bestEl = el; }
+  });
+
+  if (bestEl && bestRatio > 0.25) {
+    const idx = parseInt(bestEl.dataset.index, 10);
+    if (!isNaN(idx) && idx !== current) {
+      current = idx;
+      updateUI();
+    }
+  }
+}, {
+  threshold: [0, 0.25, 0.5, 0.75, 1],
+});
+
+sectionEls.forEach(el => visibilityObserver.observe(el));
+
 /* ─── Touch swipe handler (mobile only) ─────────────────────────────────── */
 let touchStartX = 0;
 let touchStartY = 0;
