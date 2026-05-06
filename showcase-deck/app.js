@@ -1,10 +1,11 @@
 /* ─── Formation Prototyping Showcase — Navigation & Video ─────────────────── */
 
-const TOTAL = 10;
+const TOTAL = 11;
 
 const SECTIONS = [
-  { id: 'section-1',  label: 'Cover',                    video: null },
-  { id: 'section-2',  label: 'FM · Template',            video: 'videos/02-figma-make-template.mov' },
+  { id: 'section-1',        label: 'Cover',                    video: null },
+  { id: 'section-overview', label: 'Overview',                 video: null },
+  { id: 'section-2',        label: 'FM · Template',            video: 'videos/02-figma-make-template.mov' },
   { id: 'section-3',  label: 'FM · From design file',    video: 'videos/03-figma-make-from-design.mov' },
   { id: 'section-4',  label: 'FM · Natural language',    video: 'videos/04-figma-make-natural-language.mov' },
   { id: 'section-5',  label: 'FM · Net-new',             video: 'videos/05-figma-make-net-new.mov' },

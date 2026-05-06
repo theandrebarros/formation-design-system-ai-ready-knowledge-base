@@ -98,10 +98,22 @@ html, body {
 .pane-right {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: var(--fd-space-space-3);
   padding: var(--fd-space-space-6);
   position: relative;
+}
+
+.pane-right::after {
+  content: "Hover to reveal controls · Click ⤢ to fullscreen";
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--fd-colors-content-subtle);
+  opacity: 0.5;
+  text-align: center;
+  pointer-events: none;
 }
 
 /* ─── navyD4 background (closing CTA) ───────────────────────────────────── */
