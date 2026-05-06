@@ -69,28 +69,28 @@
         <div class="spacer-4"></div>
         <p class="body-lg body-lg--white" style="max-width:720px;margin:0 auto;">
           Formation rules — tokens, components, BU themes, fonts — live in a single
-          <code style="background:rgba(255,255,255,0.1);padding:2px 8px;border-radius:6px;font-size:0.85em;">guidelines.md</code>.
+          <code class="inline-code">guidelines.md</code>.
           We paste it into the AI tool's configuration so every prompt in the file inherits the rules automatically.
         </p>
         <div class="spacer-5"></div>
-        <div style="display:flex;gap:var(--fd-space-space-4);justify-content:center;flex-wrap:wrap;max-width:880px;margin:0 auto;">
-          <div style="flex:1;min-width:240px;max-width:280px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--fd-radii-border-radius-040);padding:var(--fd-space-space-4);text-align:left;">
-            <span class="label-text label-text--white" style="opacity:0.6;font-size:10px;">Step 1 · Source</span>
-            <p class="body-sm body-md--white" style="margin-top:6px;line-height:1.45;">
-              <code style="color:var(--fd-colors-product-colors-primary);font-size:0.95em;cursor:pointer;text-decoration:underline;text-underline-offset:2px;" onclick="var d=document.querySelector('.guidelines-disclosure');if(d){d.open=!d.open;d.dispatchEvent(new Event('toggle'));}">guidelines.md</code> — the single source of truth for Formation rules across every BU.
+        <div class="how-it-works-flow">
+          <div class="how-it-works-card">
+            <span class="label-text label-text--white">Step 1 · Source</span>
+            <p class="body-sm body-md--white">
+              <code class="inline-code inline-code--link" onclick="var d=document.querySelector('.guidelines-disclosure');if(d){d.open=!d.open;d.dispatchEvent(new Event('toggle'));}">guidelines.md</code> — the single source of truth for Formation rules across every BU.
             </p>
           </div>
-          <div style="display:flex;align-items:center;color:rgba(255,255,255,0.4);font-size:20px;">→</div>
-          <div style="flex:1;min-width:240px;max-width:280px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--fd-radii-border-radius-040);padding:var(--fd-space-space-4);text-align:left;">
-            <span class="label-text label-text--white" style="opacity:0.6;font-size:10px;">Step 2 · Inject</span>
-            <p class="body-sm body-md--white" style="margin-top:6px;line-height:1.45;">
+          <div class="how-it-works-arrow">→</div>
+          <div class="how-it-works-card">
+            <span class="label-text label-text--white">Step 2 · Inject</span>
+            <p class="body-sm body-md--white">
               Pasted into Figma Make's <strong>Adjust guidelines</strong> panel and Lovable's system prompt.
             </p>
           </div>
-          <div style="display:flex;align-items:center;color:rgba(255,255,255,0.4);font-size:20px;">→</div>
-          <div style="flex:1;min-width:240px;max-width:280px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--fd-radii-border-radius-040);padding:var(--fd-space-space-4);text-align:left;">
-            <span class="label-text label-text--white" style="opacity:0.6;font-size:10px;">Step 3 · Inherit</span>
-            <p class="body-sm body-md--white" style="margin-top:6px;line-height:1.45;">
+          <div class="how-it-works-arrow">→</div>
+          <div class="how-it-works-card">
+            <span class="label-text label-text--white">Step 3 · Inherit</span>
+            <p class="body-sm body-md--white">
               Every prompt is Formation-governed. No re-explaining, no token lookups, no re-spec in review.
             </p>
           </div>
@@ -544,7 +544,11 @@
           </div>
         </div>
         <div class="cta-row">
-          <a href="https://formation-design-system.lovable.app" target="_blank" rel="noopener" class="btn btn--secondary">
+          <a href="https://id-preview--98f09cdb-cb58-4aa9-ac2c-06c6dea11f29.lovable.app/?__lovable_token=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNmhxUTVvTWNRcVVpbkFnclZ2ZXJXdEg1RVR5MSIsInByb2plY3RfaWQiOiI5OGYwOWNkYi1jYjU4LTRhYTktYWMyYy0wNmM2ZGVhMTFmMjkiLCJhY2Nlc3NfdHlwZSI6InByb2plY3QiLCJpc3MiOiJsb3ZhYmxlLWFwaSIsInN1YiI6Ijk4ZjA5Y2RiLWNiNTgtNGFhOS1hYzJjLTA2YzZkZWExMWYyOSIsImF1ZCI6WyJsb3ZhYmxlLWFwcCJdLCJleHAiOjE3Nzg2ODQzMTAsIm5iZiI6MTc3ODA3OTUxMCwiaWF0IjoxNzc4MDc5NTEwfQ.iAQxDEtKEAhKoqdVA8dUgrJAgWsWr8bQHcluCZHX1xH9ez1C00CN1GAh1ehHq34OuLOUzEDIBm6pFFK8S_FyCG6jEDAtZQWBtjAIUclWzE-QBCfSotbvlWLnzO13iKA9Z_DnEgqeyRCknJQkPMzvnMGLMjwcMT7YJcdpuNlShcypYMtiG20DSLOK9B-6Olrluav-q3cGZVu_dNftKIGZ1fCvsCW9-N9eNQMyiZVx4XuLc5QMZMsawje2jSg-aKoBxDtjpoOdVn3dxGvwiKXX97Os7hpitQrLGhMgNAib7-kA1JiENFMPdej4U0vLiKniUSsYoMt0AlEyhADYoFJKcRQb3phiL19Lr_XtC3230hYuq8ETpYxFfznyKhufogUdLHqYCRYzF0zUPP5V2kuqBgb82hnCI9hqg4DBLga7OpiueiloQQtJJoC4FYz0yJVi9KNk6OgkUw2_VTlVveESq0CYWL5AWazEMMoHGZT8uHTNQKfg56sVRz41lA3IiJSuls0TTUAvRHBTfBjq8FqrQNlY2hvdpVu8uL0K1lNWYRaivBWHADJV_uy6wIhQhIiYj1ZIvdiHE1kvhgWQ-Z89_7YpAULrce54nu2j_DUMzYDRpv7DCdViaH4WA2nbHScn9OjXTFwqxhEDgDnbALRn20iZvw3Fnj1L45VJjLjRTXk" target="_blank" rel="noopener" class="btn btn--secondary">
+            Try prototype
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </a>
+          <a href="https://formation-design-system.lovable.app" target="_blank" rel="noopener" class="btn btn--tertiary">
             Open the Lovable template
           </a>
         </div>

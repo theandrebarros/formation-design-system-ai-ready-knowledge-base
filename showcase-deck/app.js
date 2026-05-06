@@ -252,6 +252,13 @@ $toc.addEventListener('mouseenter', tocOpen);
 $toc.addEventListener('mousemove',  tocOpen);
 $toc.addEventListener('mouseleave', tocClose);
 
+document.addEventListener('click', e => {
+  if ($toc.classList.contains('toc--expanded') && !$toc.contains(e.target)) {
+    clearTimeout(tocCloseTimer);
+    $toc.classList.remove('toc--expanded');
+  }
+});
+
 /* Labels are positioned outside #toc's bounding box — attach directly */
 function bindLabelHover() {
   document.querySelectorAll('.toc-label').forEach(label => {

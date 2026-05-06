@@ -1,4 +1,12 @@
-/* ─── Formation tokens: FanDuel dark ─────────────────────────────────────── */
+/*
+ * Formation tokens — local fallback approximations for static HTML.
+ * Formation's CSS/npm package is not available here; values are sourced
+ * from the published token JSON. Replace with the real import when
+ * this page is moved into a build pipeline.
+ *
+ * Tokens NOT in the official Formation dark palette are prefixed --local-*
+ * to avoid polluting the --fd-* namespace.
+ */
 [data-theme="fanduel"][data-mode="dark"] {
   --fd-colors-background-base: #0a0a0a;
   --fd-colors-background-surface: #1C1D1D;
@@ -7,6 +15,8 @@
   --fd-colors-content-strong: #F0F3F7;
   --fd-colors-content-subtle: #7B8794;
   --fd-colors-content-inverse: #0a0a0a;
+  /* border tokens: Formation resolves these to solid colors; rgba gives the
+     equivalent perceived value against the dark surface */
   --fd-colors-border-default: rgba(255,255,255,0.1);
   --fd-colors-border-strong: rgba(255,255,255,0.18);
   --fd-colors-product-colors-primary: #0070EB;
@@ -19,8 +29,8 @@
   --fd-colors-system-alert-content-accent: #FFDC2E;
   --fd-colors-brand-gradient-color-stops-start: #005FC8;
   --fd-colors-brand-gradient-color-stops-end: #003D81;
-  /* navyD4 — replace with exact token value if different */
-  --fd-colors-brand-navy-d4: #001C55;
+  /* navy-d4: not in the published token JSON; approximated from brand palette */
+  --local-colors-brand-navy-d4: #001C55;
 
   --fd-space-space-1: 4px;
   --fd-space-space-2: 8px;
@@ -118,7 +128,7 @@ html, body {
 
 /* ─── navyD4 background (closing CTA) ───────────────────────────────────── */
 .section--gradient {
-  background: var(--fd-colors-brand-navy-d4);
+  background: var(--local-colors-brand-navy-d4);
 }
 
 /* Lovable chapter break — exact pulse image from lovable.dev */
@@ -174,7 +184,7 @@ html, body {
 .cover-gradient-overlay {
   position: absolute;
   inset: 0;
-  background: var(--fd-colors-brand-navy-d4);
+  background: var(--local-colors-brand-navy-d4);
   opacity: 0.85;
   z-index: 0;
   pointer-events: none;
@@ -864,6 +874,61 @@ html, body {
   #nav-bar { display: none; }
   .heading-jumbo { font-size: 32px; }
   .heading-xl { font-size: 24px; }
+}
+
+/* ─── How-it-works mini-cards (overview section) ────────────────────────── */
+.how-it-works-flow {
+  display: flex;
+  gap: var(--fd-space-space-4);
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.how-it-works-card {
+  flex: 1;
+  min-width: 240px;
+  max-width: 280px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--fd-colors-border-default);
+  border-radius: var(--fd-radii-border-radius-040);
+  padding: var(--fd-space-space-4);
+  text-align: left;
+}
+
+.how-it-works-card .label-text {
+  opacity: 0.6;
+  font-size: 10px;
+}
+
+.how-it-works-card .body-sm {
+  margin-top: var(--fd-space-space-2);
+  line-height: 1.45;
+}
+
+.how-it-works-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--fd-colors-content-subtle);
+  font-size: 20px;
+  opacity: 0.4;
+}
+
+/* ─── Inline code chip ───────────────────────────────────────────────────── */
+.inline-code {
+  background: rgba(255,255,255,0.1);
+  padding: 2px var(--fd-space-space-2);
+  border-radius: var(--fd-radii-border-radius-020);
+  font-size: 0.85em;
+}
+
+.inline-code--link {
+  color: var(--fd-colors-product-colors-primary);
+  font-size: 0.95em;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 /* ─── Utility ────────────────────────────────────────────────────────────── */
