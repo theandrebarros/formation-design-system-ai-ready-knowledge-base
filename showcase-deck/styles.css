@@ -226,6 +226,32 @@ html, body {
   margin-right: auto;
 }
 
+/* Closing slide — mirrors cover centring */
+@media (min-width: 901px) {
+  #section-10 .heading-cover { font-size: 60px; }
+}
+
+#section-10 .pane-left {
+  width: 100%;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 var(--fd-space-space-16);
+}
+
+#section-10 .cta-row {
+  justify-content: center;
+}
+
+#section-10 p {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Reduced-motion: pause the video, gradient still shows */
 @media (prefers-reduced-motion: reduce) {
   .cover-bg-video { animation-play-state: paused; }
@@ -1030,6 +1056,8 @@ svg { display: block; }
   border-top: 1px solid rgba(255,255,255,0.1);
   padding: 0 0 14px;
   background: rgba(0,0,0,0.25);
+  overflow: hidden;
+  transition: height 320ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 .guidelines-disclosure__toolbar {
   display: flex;

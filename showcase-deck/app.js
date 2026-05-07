@@ -427,6 +427,42 @@ requestAnimationFrame(bindLabelHover);
   });
 })();
 
+/* ─── Animated guidelines disclosure ────────────────────────────────────── */
+(function () {
+  const disclosure = document.querySelector('.guidelines-disclosure');
+  if (!disclosure) return;
+  const panel = disclosure.querySelector('.guidelines-disclosure__panel');
+  const summary = disclosure.querySelector('summary');
+
+  function openDisclosure() {
+    disclosure.setAttribute('open', '');
+    panel.style.height = '0px';
+    requestAnimationFrame(() => {
+      panel.style.height = panel.scrollHeight + 'px';
+      panel.addEventListener('transitionend', () => { panel.style.height = ''; }, { once: true });
+    });
+  }
+
+  function closeDisclosure() {
+    panel.style.height = panel.scrollHeight + 'px';
+    panel.offsetHeight; // force reflow so browser commits the height before transitioning
+    panel.style.height = '0px';
+    panel.addEventListener('transitionend', () => {
+      disclosure.removeAttribute('open');
+      panel.style.height = '';
+    }, { once: true });
+  }
+
+  summary.addEventListener('click', (e) => {
+    e.preventDefault();
+    disclosure.open ? closeDisclosure() : openDisclosure();
+  });
+
+  window.toggleGuidelinesDisclosure = function () {
+    disclosure.open ? closeDisclosure() : openDisclosure();
+  };
+})();
+
 /* ─── Init ───────────────────────────────────────────────────────────────── */
 (function init() {
   const startIndex = readHash();
