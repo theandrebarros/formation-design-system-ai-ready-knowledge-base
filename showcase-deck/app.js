@@ -5,14 +5,14 @@ const TOTAL = 11;
 const SECTIONS = [
   { id: 'section-1',        label: 'Cover',                    video: null },
   { id: 'section-overview', label: 'Overview',                 video: null },
-  { id: 'section-2',        label: 'FM · Template',            video: 'videos/02-figma-make-template.mov' },
-  { id: 'section-3',  label: 'FM · From design file',    video: 'videos/03-figma-make-from-design.mov' },
-  { id: 'section-4',  label: 'FM · Natural language',    video: 'videos/04-figma-make-natural-language.mov' },
-  { id: 'section-5',  label: 'FM · Net-new',             video: 'videos/05-figma-make-net-new.mov' },
+  { id: 'section-2',        label: 'FM · Template',            video: 'videos/02-figma-make-template.mp4' },
+  { id: 'section-3',  label: 'FM · From design file',    video: 'videos/03-figma-make-from-design.mp4' },
+  { id: 'section-4',  label: 'FM · Natural language',    video: 'videos/04-figma-make-natural-language.mp4' },
+  { id: 'section-5',  label: 'FM · Net-new',             video: 'videos/05-figma-make-net-new.mp4' },
   { id: 'section-6',  label: 'Chapter — Lovable',        video: null },
-  { id: 'section-7',  label: 'LV · Template',            video: 'videos/07-lovable-template.mov' },
-  { id: 'section-8',  label: 'LV · From design file',    video: 'videos/08-lovable-from-design.mov' },
-  { id: 'section-9',  label: 'LV · Net-new',             video: 'videos/09-lovable-net-new.mov' },
+  { id: 'section-7',  label: 'LV · Template',            video: 'videos/07-lovable-template.mp4' },
+  { id: 'section-8',  label: 'LV · From design file',    video: 'videos/08-lovable-from-design.mp4' },
+  { id: 'section-9',  label: 'LV · Net-new',             video: 'videos/09-lovable-net-new.mp4' },
   { id: 'section-10', label: 'Close',                    video: null },
 ];
 
