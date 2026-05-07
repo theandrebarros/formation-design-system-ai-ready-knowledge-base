@@ -24,8 +24,8 @@ DEST_RAW="${SCRIPT_DIR}/guidelines.md"
 DEST_HTML="${SCRIPT_DIR}/index.html"
 
 if [[ ! -f "${SOURCE_PATH}" ]]; then
-  echo "Error: source not found: ${SOURCE_PATH}" >&2
-  exit 1
+  echo "Warning: source not found: ${SOURCE_PATH} — skipping sync (guidelines already inlined)." >&2
+  exit 0
 fi
 
 # 1. Copy guidelines into showcase-deck
