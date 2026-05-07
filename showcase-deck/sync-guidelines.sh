@@ -1,45 +1,36 @@
 #!/usr/bin/env bash
 # Sync the Figma Make guidelines.md into the showcase deck.
 #
-# Source: fanduel/formation-figma-plugins monorepo
-#   packages/fanduel-ds-knowledge/kits/figma-make/figma-make-guidelines.md
+# Source (same repo):
+#   packages/knowledge/fanduel-ds-knowledge/kits/figma-make/figma-make-guidelines.md
 #
-# - Downloads the raw file → showcase-deck/guidelines.md
-#   (so the "Download raw file" link always serves the latest version)
+# - Copies the file → showcase-deck/guidelines.md
 # - Inlines the content into showcase-deck/index.html between
 #   <!-- GUIDELINES_BEGIN --> and <!-- GUIDELINES_END --> markers
 #   (so the in-page expandable preview renders even via file://)
 #
 # Usage:
-#   ./showcase-deck/sync-guidelines.sh             # fetches from default branch
-#   TAG=fanduel-ds-knowledge-v1.2.0 ./showcase-deck/sync-guidelines.sh  # pin a release
+#   ./showcase-deck/sync-guidelines.sh
 #
 # Also runs automatically in the deploy workflow before publishing.
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Monorepo coordinates — update TAG to pin a specific release.
-REPO="fanduel/formation-figma-plugins"
-TAG="${TAG:-fanduel-ds-knowledge}"   # default: tracking branch; set TAG env var to pin a release tag
-REMOTE_PATH="packages/fanduel-ds-knowledge/kits/figma-make/figma-make-guidelines.md"
-SRC_URL="https://raw.githubusercontent.com/${REPO}/${TAG}/${REMOTE_PATH}"
-
+SOURCE_PATH="${REPO_ROOT}/packages/knowledge/fanduel-ds-knowledge/kits/figma-make/figma-make-guidelines.md"
 DEST_RAW="${SCRIPT_DIR}/guidelines.md"
 DEST_HTML="${SCRIPT_DIR}/index.html"
 
-# 1. Fetch raw guidelines from monorepo
-echo "Fetching: ${SRC_URL}"
-if command -v curl >/dev/null 2>&1; then
-  curl -fsSL "${SRC_URL}" -o "${DEST_RAW}"
-elif command -v wget >/dev/null 2>&1; then
-  wget -q "${SRC_URL}" -O "${DEST_RAW}"
-else
-  echo "Error: neither curl nor wget found." >&2
+if [[ ! -f "${SOURCE_PATH}" ]]; then
+  echo "Error: source not found: ${SOURCE_PATH}" >&2
   exit 1
 fi
-echo "Downloaded: ${DEST_RAW}"
+
+# 1. Copy guidelines into showcase-deck
+cp "${SOURCE_PATH}" "${DEST_RAW}"
+echo "Copied: ${DEST_RAW}"
 
 # 2. Inline content between markers in index.html
 python3 - "${DEST_RAW}" "${DEST_HTML}" <<'PY'
