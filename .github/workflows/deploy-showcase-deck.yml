@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - "showcase-deck/**"
-      - "figma-make/figma-make-guidelines.md"
       - ".github/workflows/deploy-showcase-deck.yml"
   workflow_dispatch:
 
