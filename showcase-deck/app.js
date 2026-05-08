@@ -297,13 +297,32 @@ const visibilityObserver = new IntersectionObserver(entries => {
     if (ratio > bestRatio) { bestRatio = ratio; bestEl = el; }
   });
 
-  if (bestEl && bestRatio > 0.25) {
-    const idx = parseInt(bestEl.dataset.index, 10);
-    if (!isNaN(idx) && idx !== current) {
-      current = idx;
-      updateUI();
-    }
+  if (!bestEl || bestRatio <= 0.25) return;
+
+  const idx = parseInt(bestEl.dataset.index, 10);
+  if (isNaN(idx)) return;
+
+  /* Update nav UI when dominant section changes */
+  if (idx !== current) {
+    const prev = current;
+    current = idx;
+    deactivateVideo(prev);
+    updateUI();
   }
+
+  /* Drive video playback for the dominant section */
+  activateVideo(idx);
+
+  /* Keep cover bg video in sync */
+  if (coverVid) {
+    if (idx === 0) coverVid.play().catch(() => {});
+    else coverVid.pause();
+  }
+
+  /* Preload neighbours so the next section feels instant */
+  [idx - 1, idx + 1].forEach(i => {
+    if (i >= 0 && i < TOTAL && SECTIONS[i].video) getOrCreateVideo(i);
+  });
 }, {
   threshold: [0, 0.25, 0.5, 0.75, 1],
 });
@@ -541,6 +560,22 @@ requestAnimationFrame(bindLabelHover);
   };
 })();
 
+/* ─── Viewport-class change (Fold7 fold/unfold, orientation) ─────────────── */
+mobileQuery.addEventListener('change', () => {
+  if (mobileQuery.matches) {
+    /* Entered mobile: clear any desktop translateX so stacked layout shows */
+    $sections.style.transform = '';
+  } else {
+    /* Entered desktop: position slider to current slide */
+    $sections.style.transform = `translateX(${-current * 100}vw)`;
+  }
+  activateVideo(current);
+  if (coverVid) {
+    if (current === 0) coverVid.play().catch(() => {});
+    else coverVid.pause();
+  }
+});
+
 /* ─── Init ───────────────────────────────────────────────────────────────── */
 (function init() {
   const startIndex = readHash();
@@ -558,7 +593,23 @@ requestAnimationFrame(bindLabelHover);
     [startIndex - 1, startIndex + 1].forEach(i => {
       if (i >= 0 && i < TOTAL && SECTIONS[i].video) getOrCreateVideo(i);
     });
-    /* Cover bg video: pause immediately if not starting on slide 0 */
-    if (coverVid && startIndex !== 0) coverVid.pause();
+    /* Cover bg video: pause if not starting on slide 0; play with gesture fallback if on slide 0 */
+    if (coverVid) {
+      if (startIndex !== 0) {
+        coverVid.pause();
+      } else {
+        coverVid.muted = true;
+        coverVid.playsInline = true;
+        const p = coverVid.play();
+        if (p !== undefined) {
+          p.catch(() => {
+            /* Autoplay blocked — retry on first user gesture */
+            const retry = () => { coverVid.play().catch(() => {}); };
+            document.addEventListener('pointerdown', retry, { once: true });
+            document.addEventListener('touchstart', retry, { once: true, passive: true });
+          });
+        }
+      }
+    }
   });
 })();

@@ -594,17 +594,9 @@ html, body {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   background: var(--fd-colors-background-base);
-}
-
-.video-frame video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 .video-placeholder {
@@ -951,8 +943,21 @@ html, body {
     align-items: center;
     padding: 32px 24px 96px; /* bottom clears the FAB */
   }
+  /* Section 10 (close slide) has section--cover class but more content than
+     section 1 — let it grow rather than clip under overflow:hidden + 100svh. */
+  #section-10 {
+    height: auto;
+    min-height: 100svh;
+    overflow: visible;
+  }
   .heading-jumbo { font-size: 32px; }
   .heading-xl { font-size: 24px; }
+}
+
+/* ─── Tablet tier (641–900px): typography between desktop and small-phone ── */
+@media (max-width: 900px) and (min-width: 641px) {
+  .heading-cover { font-size: 64px; }
+  .heading-jumbo { font-size: 30px; }
 }
 
 /* ─── How-it-works mini-cards (overview section) ────────────────────────── */
