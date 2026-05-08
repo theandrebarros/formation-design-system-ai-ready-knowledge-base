@@ -110,6 +110,7 @@ html, body {
   padding: var(--fd-space-space-16) var(--fd-space-space-10) var(--fd-space-space-16) var(--fd-space-space-16);
   position: relative;
   z-index: 1;
+  contain: layout paint;
 }
 
 .pane-right {
@@ -121,6 +122,7 @@ html, body {
   gap: var(--fd-space-space-3);
   padding: var(--fd-space-space-6);
   position: relative;
+  contain: layout paint;
 }
 
 .pane-right::after {

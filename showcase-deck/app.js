@@ -123,6 +123,7 @@ function getOrCreateVideo(index) {
   const video = document.createElement('video');
   video.src = src;
   video.autoplay = false;
+  video.preload = 'metadata';
   video.muted = true;
   video.loop = true;
   video.playsInline = true;
