@@ -209,6 +209,7 @@ function goTo(next, direction) {
   activateVideo(next);
   updateUI();
   pushHash(next);
+  if (next === TOTAL - 1) launchConfetti();
 }
 
 /* ─── UI sync ────────────────────────────────────────────────────────────── */
@@ -325,6 +326,64 @@ document.addEventListener('touchend', e => {
     goTo(dx < 0 ? current + 1 : current - 1, dx < 0 ? 1 : -1);
   }
 }, { passive: true });
+
+/* ─── Confetti ───────────────────────────────────────────────────────────── */
+function launchConfetti() {
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999;';
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  const COLORS = ['#0070EB','#128000','#F5C842','#ffffff','#0098FF','#FFDC2E'];
+  const COUNT  = 110;
+  const GRAVITY = 0.35;
+  const DURATION = 3200; // ms
+
+  const particles = Array.from({ length: COUNT }, () => ({
+    x:    Math.random() * canvas.width,
+    y:    Math.random() * canvas.height * -0.5,
+    vx:   (Math.random() - 0.5) * 6,
+    vy:   Math.random() * 4 + 2,
+    w:    Math.random() * 8 + 5,
+    h:    Math.random() * 4 + 3,
+    rot:  Math.random() * Math.PI * 2,
+    spin: (Math.random() - 0.5) * 0.18,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    opacity: 1,
+  }));
+
+  const start = performance.now();
+
+  function draw(now) {
+    const elapsed = now - start;
+    const progress = elapsed / DURATION;
+    if (elapsed > DURATION) { canvas.remove(); return; }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.x  += p.vx;
+      p.y  += p.vy;
+      p.vy += GRAVITY;
+      p.rot += p.spin;
+      p.opacity = Math.max(0, 1 - Math.pow(progress * 1.2, 2));
+
+      ctx.save();
+      ctx.globalAlpha = p.opacity;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  requestAnimationFrame(draw);
+}
 
 /* ─── goTo exposed to inline HTML ────────────────────────────────────────── */
 window.goTo = goTo;
