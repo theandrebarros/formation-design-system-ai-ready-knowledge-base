@@ -225,7 +225,9 @@ html, body {
 }
 
 #section-1 .eyebrow,
-#section-1 .cta-row {
+#section-1 .logo-lockup,
+#section-1 .cta-row,
+#section-10 .logo-lockup {
   justify-content: center;
 }
 
@@ -238,6 +240,12 @@ html, body {
 /* Closing slide — mirrors cover centring */
 @media (min-width: 901px) {
   #section-10 .heading-cover { font-size: 60px; }
+
+  /* Give logo lockup room to breathe above the big cover title */
+  #section-1 .logo-lockup,
+  #section-10 .logo-lockup {
+    margin-bottom: 56px;
+  }
 }
 
 #section-10 .pane-left {
@@ -1203,6 +1211,13 @@ svg { display: block; }
 
 /* ─── Tablet / small-phone tier (≤640px) ────────────────────────────────── */
 @media (max-width: 640px) {
+  /* Logo lockup */
+  .logo-lockup { gap: 8px; margin-bottom: var(--fd-space-space-3); flex-wrap: nowrap; justify-content: center; }
+  .logo-lockup__logo--figma    { height: 18px; }
+  .logo-lockup__logo--formation { height: 14px; }
+  .logo-lockup__logo--lovable  { height: 13px; }
+  .logo-lockup__plus { font-size: 13px; }
+
   /* Typography */
   .heading-cover { font-size: 48px; }
   .heading-jumbo { font-size: 28px; }
@@ -1256,6 +1271,13 @@ svg { display: block; }
 
 /* ─── Small-phone tier (≤480px) ─────────────────────────────────────────── */
 @media (max-width: 480px) {
+  /* Logo lockup — force single line at small phone sizes */
+  .logo-lockup { gap: 6px; flex-wrap: nowrap; margin-bottom: var(--fd-space-space-3); }
+  .logo-lockup__logo--figma    { height: 16px; }
+  .logo-lockup__logo--formation { height: 12px; }
+  .logo-lockup__logo--lovable  { height: 11px; }
+  .logo-lockup__plus { font-size: 11px; }
+
   /* Typography */
   .heading-cover { font-size: 36px; }
   .heading-jumbo { font-size: 24px; }
@@ -1324,4 +1346,42 @@ svg { display: block; }
     opacity: 0.3;
     pointer-events: none;
   }
+}
+
+/* ─── Logo lockup (cover + closing slide) ───────────────────────────────── */
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: var(--fd-space-space-3);
+  margin-bottom: var(--fd-space-space-4);
+  flex-wrap: nowrap;
+}
+
+.logo-lockup__logo {
+  display: block;
+  flex-shrink: 0;
+}
+
+.logo-lockup__logo--figma {
+  height: 28px;
+  width: auto;
+}
+
+.logo-lockup__logo--formation {
+  height: 22px;
+  width: auto;
+}
+
+.logo-lockup__logo--lovable {
+  height: 20px;
+  width: auto;
+}
+
+.logo-lockup__plus {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1;
+  user-select: none;
 }
