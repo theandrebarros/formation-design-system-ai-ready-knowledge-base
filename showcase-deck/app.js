@@ -128,6 +128,10 @@ function getOrCreateVideo(index) {
   video.loop = true;
   video.playsInline = true;
 
+  /* Insert into DOM immediately — mobile browsers (iOS Safari) won't load
+     or fire canplay on a video that isn't attached to the document. */
+  frame.insertBefore(video, frame.querySelector('.video-controls'));
+
   video.addEventListener('error', () => {
     video.remove();
     delete videoEls[index];
@@ -136,8 +140,6 @@ function getOrCreateVideo(index) {
   video.addEventListener('canplay', () => {
     const placeholder = document.getElementById(`placeholder-${index}`);
     if (placeholder) placeholder.style.display = 'none';
-    /* Insert before controls so controls stay on top */
-    frame.insertBefore(video, frame.querySelector('.video-controls'));
   });
 
   /* Sync play/pause icon with actual video state */
