@@ -28,6 +28,7 @@ const $fabPrev = document.getElementById('fab-prev');
 const $fabNext = document.getElementById('fab-next');
 
 const mobileQuery = window.matchMedia('(max-width: 900px)');
+const coverVid = document.querySelector('.cover-bg-video');
 
 /* ─── Build nav dots ─────────────────────────────────────────────────────── */
 SECTIONS.forEach((_, i) => {
@@ -121,7 +122,7 @@ function getOrCreateVideo(index) {
 
   const video = document.createElement('video');
   video.src = src;
-  video.autoplay = true;
+  video.autoplay = false;
   video.muted = true;
   video.loop = true;
   video.playsInline = true;
@@ -168,6 +169,17 @@ function goTo(next, direction) {
 
   current = next;
 
+  /* Preload adjacent slides so first-visit doesn't flash a placeholder */
+  [next - 1, next + 1].forEach(i => {
+    if (i >= 0 && i < TOTAL && SECTIONS[i].video) getOrCreateVideo(i);
+  });
+
+  /* Cover bg video: only decode while slide 0 is visible */
+  if (coverVid) {
+    if (next === 0) coverVid.play().catch(() => {});
+    else if (leaving === 0) coverVid.pause();
+  }
+
   if (mobileQuery.matches) {
     /* On mobile sections are stacked — scroll the target into view.
        Lock the observer so mid-scroll intersection callbacks don't
@@ -182,7 +194,11 @@ function goTo(next, direction) {
       $entering.classList.add(dir > 0 ? 'entering-from-right' : 'entering-from-left');
       void $entering.offsetWidth;
     }
+    $sections.style.willChange = 'transform';
     $sections.style.transform = `translateX(${-current * 100}vw)`;
+    $sections.addEventListener('transitionend', () => {
+      $sections.style.willChange = '';
+    }, { once: true });
     requestAnimationFrame(() => {
       if ($entering) $entering.classList.remove('entering-from-right', 'entering-from-left');
     });
@@ -476,7 +492,11 @@ requestAnimationFrame(bindLabelHover);
     $sections.style.transition = '';
     updateUI();
     activateVideo(startIndex);
-    /* Preload all other video slides so the placeholder doesn't flash on first visit */
-    SECTIONS.forEach((s, i) => { if (s.video && i !== startIndex) getOrCreateVideo(i); });
+    /* Preload adjacent slides so nav feels instant */
+    [startIndex - 1, startIndex + 1].forEach(i => {
+      if (i >= 0 && i < TOTAL && SECTIONS[i].video) getOrCreateVideo(i);
+    });
+    /* Cover bg video: pause immediately if not starting on slide 0 */
+    if (coverVid && startIndex !== 0) coverVid.pause();
   });
 })();
